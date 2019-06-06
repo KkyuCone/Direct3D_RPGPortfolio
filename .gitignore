@@ -300,6 +300,7 @@ __pycache__/
 *.wav
 *.mp3
 *.mp4
+*.FBX
 
 ### VisualStudio Patch ###
 # By default, sensitive information, such as encrypted password
