@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="01. Main">
+      <UniqueIdentifier>{09d794e8-4a80-4900-9976-db74dc5173a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Main\MainFrame">
+      <UniqueIdentifier>{11855538-0673-4497-ac14-178a9a6608aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Editor">
+      <UniqueIdentifier>{3394c738-6503-4e2c-8dca-dfa493eec31d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Editor\Doc">
+      <UniqueIdentifier>{1f5324ce-1ff7-4189-8e16-1a7f27bbf2f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. Editor\View">
+      <UniqueIdentifier>{85495737-c6a4-43ca-8826-8eb0d8aa90c9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>01. Main</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>01. Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>01. Main</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>01. Main\MainFrame</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorDoc.h">
+      <Filter>02. Editor\Doc</Filter>
+    </ClInclude>
+    <ClInclude Include="Editor.h">
+      <Filter>02. Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorFormView.h">
+      <Filter>02. Editor\View</Filter>
+    </ClInclude>
+    <ClInclude Include="EditorView.h">
+      <Filter>02. Editor\View</Filter>
+    </ClInclude>
+    <ClInclude Include="GEditorDoc.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>01. Main</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>01. Main\MainFrame</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorDoc.cpp">
+      <Filter>02. Editor\Doc</Filter>
+    </ClCompile>
+    <ClCompile Include="Editor.cpp">
+      <Filter>02. Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorFormView.cpp">
+      <Filter>02. Editor\View</Filter>
+    </ClCompile>
+    <ClCompile Include="EditorView.cpp">
+      <Filter>02. Editor\View</Filter>
+    </ClCompile>
+    <ClCompile Include="GEditorDoc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Editor.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Editor.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\EditorDoc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Editor.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

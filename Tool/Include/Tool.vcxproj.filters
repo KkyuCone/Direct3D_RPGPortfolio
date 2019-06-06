@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="01. Main">
+      <UniqueIdentifier>{0d208e68-46ec-41fa-9c4b-0685ee822015}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Main\01. Base">
+      <UniqueIdentifier>{39f0577a-c7a9-4097-90e2-af80356e4f37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="01. Main\02. Resource">
+      <UniqueIdentifier>{11e09097-0194-4118-bdc8-1856468ff814}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="02. View">
+      <UniqueIdentifier>{b23a8351-f11e-4209-b024-f5e6b6f40448}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. FormView">
+      <UniqueIdentifier>{d6854575-deb0-46c6-8f4f-84bdf71220c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. FormView\01. Manager">
+      <UniqueIdentifier>{172d794e-93ff-4890-81d4-ae534755f2fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="03. FormView\02. Component">
+      <UniqueIdentifier>{8c806fee-344a-4e50-9ffb-c80986ae2cc6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h">
+      <Filter>01. Main\02. Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>01. Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Tool.h">
+      <Filter>01. Main</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>01. Main\01. Base</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>01. Main\01. Base</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolView.h">
+      <Filter>02. View</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjManagerForm.h">
+      <Filter>03. FormView\01. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ComForm.h">
+      <Filter>03. FormView\02. Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolDoc.h">
+      <Filter>01. Main</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>01. Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Tool.cpp">
+      <Filter>01. Main</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>01. Main\01. Base</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolView.cpp">
+      <Filter>02. View</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjManagerForm.cpp">
+      <Filter>03. FormView\01. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ComForm.cpp">
+      <Filter>03. FormView\02. Component</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolDoc.cpp">
+      <Filter>01. Main</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Tool.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Tool.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\Tool.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

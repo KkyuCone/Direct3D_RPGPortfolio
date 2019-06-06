@@ -1,0 +1,22 @@
+X * VM = 1 0 0
+Y * VM = 0 1 0
+Z * VM = 0 0 1
+
+Xx Xy Xz    11 12 13    1 0 0
+Yx Yy Yz *  21 22 23 = 0 1 0
+Zx Zy Zz    31 32 33    0 0 1
+
+1   0  0 0
+0   1  0 0
+0   0  1 0
+-x -y -z 1
+
+Xx Yx Zx 0
+Xy Yy Zy 0
+Xz Yz Zz 0
+0   0  0  1
+
+Xx   Yx   Zx   0
+Xy   Yy   Zy   0
+Xz   Yz   Zz   0
+-P.X -P.Y -P.Z 1
