@@ -13,6 +13,7 @@ Transform::Transform()
 	, m_bUpdate(true)
 	, m_bUI(false)
 	, m_pLookAt(nullptr)
+	, m_bLookAt(false)
 {
 	m_vMove = Vector3::Zero;
 	m_tShadowCBuffer = {};
@@ -640,6 +641,7 @@ void Transform::LookAt(GameObject * _pObject)
 	// GetTransform()하는 순간 레퍼런스 카운터가 증가하니 기존에 있던건 Release를 통해 차감해준다.
 	SAFE_RELEASE(m_pLookAt);
 	m_pLookAt = _pObject->GetTransform();
+	m_bLookAt = true;
 }
 
 void Transform::LookAt(Component * _pComponent)
@@ -651,11 +653,13 @@ void Transform::LookAt(Component * _pComponent)
 		// 그러므로 레퍼런스 카운터를 1증가시킨다.
 		m_pLookAt = (Transform*)_pComponent;
 		_pComponent->AddReference();
+		m_bLookAt = true;
 	}
 	else
 	{
 		SAFE_RELEASE(m_pLookAt);
 		m_pLookAt = _pComponent->GetTransform();
+		m_bLookAt = true;
 	}
 }
 
@@ -667,11 +671,16 @@ void Transform::RemoveLookAt()
 void Transform::RotationLookAt()
 {
 	// 바라보는 대상이 없으면 return;
-	if (nullptr == m_pLookAt)
+	if (nullptr == m_pLookAt || false == m_bLookAt)
 	{
 		return;
 	}
 	RotationLookAt(m_pLookAt->GetWorldPosition());
+}
+
+void Transform::SetLookAtActive(bool _Active)
+{
+	m_bLookAt = _Active;
 }
 
 void Transform::RotationLookAt(Vector3 _vLookAt)

@@ -1,4 +1,5 @@
 #include "MainScene.h"
+#include "Device.h"
 
 MainScene::MainScene() :
 	pDefaultLayer(nullptr),
@@ -6,11 +7,14 @@ MainScene::MainScene() :
 	pPlayerHeadObject(nullptr),
 	pPlayerCameraPivotObject(nullptr),
 	pMonsterObject(nullptr),
+	pHookaObject(nullptr),
+	pHookaPivotObject(nullptr),
 	pParticleObject(nullptr),
 	pPlayerScript(nullptr),
 	pMainCameraObject(nullptr),
 	pHPBarUIObj(nullptr),
 	pMPBarUIObj(nullptr),
+	pEXPBarUIObj(nullptr),
 	pHpBarScript(nullptr),
 	pMPBarScript(nullptr),
 	pPlayerWeaponObject(nullptr),
@@ -19,6 +23,11 @@ MainScene::MainScene() :
 {
 	pHPText = nullptr;
 	pMPText = nullptr;
+	pEXPText = nullptr;
+
+	m_pHPUIBar = nullptr;
+	m_pMPUIBar = nullptr;
+	m_pEXPUIBar = nullptr;
 }
 
 
@@ -33,6 +42,8 @@ MainScene::~MainScene()
 	SAFE_RELEASE(pPlayerWeaponScript);
 
 	SAFE_RELEASE(pMonsterObject);
+	SAFE_RELEASE(pHookaObject);
+	SAFE_RELEASE(pHookaPivotObject);
 	SAFE_RELEASE(pParticleObject);
 	SAFE_RELEASE(pLandScapeObject);
 
@@ -43,13 +54,20 @@ MainScene::~MainScene()
 
 	// UI
 	SAFE_RELEASE(pHPText);
-	//SAFE_RELEASE(pMPText);
+	SAFE_RELEASE(pMPText);
+	SAFE_RELEASE(pEXPText);
 
 	SAFE_RELEASE(pHpBarScript);
 	SAFE_RELEASE(pMPBarScript);
+	//SAFE_RELEASE(pMPBarScript);
+
+	SAFE_RELEASE(m_pHPUIBar);
+	SAFE_RELEASE(m_pMPUIBar);
+	SAFE_RELEASE(m_pEXPUIBar);
 
 	SAFE_RELEASE(pHPBarUIObj);
 	SAFE_RELEASE(pMPBarUIObj);
+	SAFE_RELEASE(pEXPBarUIObj);
 }
 
 bool MainScene::Init()
@@ -146,6 +164,15 @@ bool MainScene::ProtoTypeInit()
 
 	SAFE_RELEASE(pMonsterProtoTypeScript);
 	SAFE_RELEASE(pMonsterProtoType);
+
+	GameObject* pHookaProtoType = GameObject::CreatePrototype("Hooka", m_pScene);
+	HookaFootmanA* pHookaProtoTypeScript = pHookaProtoType->AddComponent<HookaFootmanA>("Hooka");
+
+	SAFE_RELEASE(pHookaProtoType);
+	SAFE_RELEASE(pHookaProtoTypeScript);
+
+	GameObject* pMonsterPivotProtoType = GameObject::CreatePrototype("MosnterPivot", m_pScene);
+	SAFE_RELEASE(pMonsterPivotProtoType);
 
 	// 총알 프로토타입
 	GameObject* pBulletProtoType = GameObject::CreatePrototype("Bullet", m_pScene);
@@ -299,6 +326,24 @@ bool MainScene::MonsterInit()
 	SAFE_RELEASE(pMonTransform);
 	SAFE_RELEASE(pMonsterObject);
 
+	// Hooka
+	pHookaObject = GameObject::CreateClone("Hooka", m_pScene, pDefaultLayer);
+
+	Transform* pHookaTransform = pHookaObject->GetTransform();
+	pHookaTransform->SetWorldPosition(15.0f, 1.0f, 60.0f);
+	pHookaTransform->LookAt(pPlayerObject);
+
+	pHookaPivotObject = GameObject::CreateClone("MosnterPivot", m_pScene, pDefaultLayer);
+	pHookaPivotObject->SetParent(pHookaObject);
+	pHookaPivotObject->SetBoneSoket("Bone05");
+
+	HookaFootmanA* pHookaObjectScript = pHookaObject->FindComponentFromType<HookaFootmanA>(CT_USERCOMPONENT);
+	pHookaObjectScript->SetMonsterPivotObject(pHookaPivotObject);
+
+	SAFE_RELEASE(pHookaObjectScript);
+	SAFE_RELEASE(pHookaTransform);
+	SAFE_RELEASE(pHookaObject);
+
 	return true;
 }
 
@@ -359,46 +404,56 @@ bool MainScene::TPCameraInit()
 
 bool MainScene::UIInit()
 {
+	Layer*	pUILayer = m_pScene->FindLayer("UI");
 	// UI - 상태바
 	// HP
-	pHPBarUIObj = GameObject::CreateObject("HPBar", pDefaultLayer);
+	pHPBarUIObj = GameObject::CreateObject("HPBar", pUILayer);
+	m_pHPUIBar = pHPBarUIObj->AddComponent<UIBar>("HPBar");
+	m_pHPUIBar->SetTexture("HPBarGage", TEXT("GageBar_I3.tga"), PATH_UI_GAGEBAR);
 	pHpBarScript = pHPBarUIObj->AddComponent<StateBar>("UI_StateBar_HP");
 	pHpBarScript->SetMin(0);
 	pHpBarScript->SetMax(10000);
+	pHpBarScript->SetUIBar(m_pHPUIBar);
 
 	Transform* pHPTr = pHPBarUIObj->GetTransform();
-	pHPTr->SetWorldPosition(100.0f, 100.0f, 0.0f);
+	pHPTr->SetWorldScale(512.0f, 32.0f, 1.0f);
+
+	pHPTr->SetWorldPosition(_RESOLUTION.iWidth / 3.f - 100.f, _RESOLUTION.iHeight / 4.f - 50.f, 0.f);
+
+	SAFE_RELEASE(m_pHPUIBar);
+	SAFE_RELEASE(pHpBarScript);
+	SAFE_RELEASE(pHPTr);
 
 
 	// MP
-	pMPBarUIObj = GameObject::CreateObject("MPBar", pDefaultLayer);
-	pMPBarScript = pMPBarUIObj->AddComponent<StateBar>("UI_StateBar_MP");
-	pMPBarScript->SetMin(0);
-	pMPBarScript->SetMax(20000);
+	//pMPBarUIObj = GameObject::CreateObject("MPBar", pDefaultLayer);
+	//pMPBarScript = pMPBarUIObj->AddComponent<StateBar>("UI_StateBar_MP");
+	//pMPBarScript->SetMin(0);
+	//pMPBarScript->SetMax(20000);
 
-	Transform* pMPTr = pMPBarUIObj->GetTransform();
-	pMPTr->SetWorldPosition(100.0f, 250.0f, 0.0f);
+	//Transform* pMPTr = pMPBarUIObj->GetTransform();
+	//pMPTr->SetWorldPosition(100.0f, 250.0f, 0.0f);
 
 
-	//  UI - 텍스트
-	// 상태바
-	pHPText = GameObject::CreateObject("HPText", pDefaultLayer);
-	Transform* pHPTextTr = pHPText->GetTransform();
-	pHPTextTr->SetWorldPosition(pHPTr->GetWorldPosition());
+	////  UI - 텍스트
+	//// 상태바
+	//pHPText = GameObject::CreateObject("HPText", pDefaultLayer);
+	//Transform* pHPTextTr = pHPText->GetTransform();
+	//pHPTextTr->SetWorldPosition(pHPTr->GetWorldPosition());
 
-	UIText* pHPUIText = pHPText->AddComponent<UIText>("Text");
-	pHPUIText->SetText(TEXT("HP"));
-	pHPUIText->Shadow(true);
-	pHPUIText->SetShadowColor(1.0f, 0.0f, 1.0f, 1.0f);
-	pHPUIText->SetShadowOffset(Vector3(2.f, -2.f, 0.f));
-	pHPUIText->SetShadowOpacity(1.f);
-	pHPUIText->SetFont("Gungseo");
-	pHPUIText->SetColor(1.f, 1.f, 0.f, 1.f);
-	pHPUIText->SetOpacity(0.5f);
-	pHPUIText->AlphaBlend(true);
-	pHPUIText->SetRenderArea(0.f, 0.f, 300.f, 50.f);
+	//UIText* pHPUIText = pHPText->AddComponent<UIText>("Text");
+	//pHPUIText->SetText(TEXT("HP"));
+	//pHPUIText->Shadow(true);
+	//pHPUIText->SetShadowColor(1.0f, 0.0f, 1.0f, 1.0f);
+	//pHPUIText->SetShadowOffset(Vector3(2.f, -2.f, 0.f));
+	//pHPUIText->SetShadowOpacity(1.f);
+	//pHPUIText->SetFont("Gungseo");
+	//pHPUIText->SetColor(1.f, 1.f, 0.f, 1.f);
+	//pHPUIText->SetOpacity(0.5f);
+	//pHPUIText->AlphaBlend(true);
+	//pHPUIText->SetRenderArea(0.f, 0.f, 300.f, 50.f);
 
-	pHpBarScript->SetUIText(pHPUIText);			// 연결
+	//pHpBarScript->SetUIText(pHPUIText);			// 연결
 
 	//pMPText = GameObject::CreateObject("MPText", pDefaultLayer);
 	//Transform* pMPTextTr = pMPText->GetTransform();
@@ -418,12 +473,12 @@ bool MainScene::UIInit()
 	//pMPBarScript->SetUIText(pMPUIText);			// 연결
 
 	// Release
-	SAFE_RELEASE(pHPTr);
+	/*SAFE_RELEASE(pHPTr);
 	SAFE_RELEASE(pMPTr);
 
 	SAFE_RELEASE(pHPUIText);
 
-	SAFE_RELEASE(pHPTextTr);
+	SAFE_RELEASE(pHPTextTr);*/
 
 	//SAFE_RELEASE(pMPUIText);
 

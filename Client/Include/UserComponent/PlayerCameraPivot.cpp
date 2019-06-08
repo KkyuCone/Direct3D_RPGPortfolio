@@ -68,8 +68,6 @@ int PlayerCameraPivot::LateUpdate(float _fTime)
 		Transform* pParentTR = m_pParentObj->GetTransform();
 		pParentTR->SetWorldPosition(m_pTransform->GetWorldPositionAtMatrix());
 		SAFE_RELEASE(pParentTR);
-		//float fDist = m_pTPCamTR->GetWorldPosition().Distance(m_pTransform->GetWorldPositionAtMatrix());
-		//m_pTPCamTR->SetWorldPosition(m_pTransform->GetWorldPositionAtMatrix() + m_pTPCamTR->GetWorldAxis(AXIS_Z) * -fDist);
 
 		m_pParentScript->ReNavLateUpdate(_fTime);
 	}

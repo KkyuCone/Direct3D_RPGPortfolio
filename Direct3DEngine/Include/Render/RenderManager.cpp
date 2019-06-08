@@ -17,6 +17,7 @@
 #include "..\Component\Renderer.h"
 #include "..\Component\Transform.h"
 #include "..\Component\Camera.h"
+#include "..\Component\TPCamera.h"
 #include "..\Scene\Scene.h"
 #include "..\Component\AnimationFrame.h"
 #include "..\Component\Particle.h"
@@ -1000,38 +1001,54 @@ void RenderManager::AddRenderObject(GameObject* _pObject)
 
 			fRadius *= fScale;		// 스케일 값을 곱해야한다. ( 크기값 적용 )
 
+			GameObject* pMainCamObj = _pObject->GetScene()->GetMainCameraObject();
 			Camera* pMainCamera = _pObject->GetScene()->GetMainCamera();
+			TPCamera* pTPCamera = pMainCamObj->FindComponentFromType<TPCamera>(CT_TPCAMERA);
+			GameObject* pTPParent = pTPCamera->GetTargetObject()->GetParent();
 
-			// 부모가 있을 경우 
-			if (true == _pObject->ParentEnable())
+			if (pTPParent == _pObject)
 			{
-				Transform* pParentTr = _pObject->GetParent()->GetTransform();
-				vCenter += pParentTr->GetWorldPosition();
-
-				float fParentScale = 1.0f;
-
-				Vector3 vParentScale = pParentTr->GetWorldScale();
-				fParentScale = (fParentScale < vParentScale.x ? vParentScale.x : fParentScale);
-				fParentScale = (fParentScale < vParentScale.y ? vParentScale.y : fParentScale);
-				fParentScale = (fParentScale < vParentScale.z ? vParentScale.z : fParentScale);
-
-				fRadius *= fParentScale;
-
-				SAFE_RELEASE(pParentTr);
+				// 컬링 X
+				_pObject->SetFrustumCulling(false);
+				SAFE_RELEASE(pMainCamObj);
+				SAFE_RELEASE(pMainCamera);
+				SAFE_RELEASE(pTPCamera);
 			}
-
-			bool bFrustumCull = pMainCamera->FrustumInSphere(vCenter, fRadius);
-
-			SAFE_RELEASE(pMainCamera);
-
-			_pObject->SetFrustumCulling(!bFrustumCull);			// 프러스텀 여부 셋팅
-
-			if (false == bFrustumCull)
+			else
 			{
-				SAFE_RELEASE(pMesh);
-				SAFE_RELEASE(pMaterial);
-				SAFE_RELEASE(pRenderer);
-				return;
+				// 부모가 있을 경우 
+				if (true == _pObject->ParentEnable())
+				{
+					Transform* pParentTr = _pObject->GetParent()->GetTransform();
+					vCenter += pParentTr->GetWorldPosition();
+
+					float fParentScale = 1.0f;
+
+					Vector3 vParentScale = pParentTr->GetWorldScale();
+					fParentScale = (fParentScale < vParentScale.x ? vParentScale.x : fParentScale);
+					fParentScale = (fParentScale < vParentScale.y ? vParentScale.y : fParentScale);
+					fParentScale = (fParentScale < vParentScale.z ? vParentScale.z : fParentScale);
+
+					fRadius *= fParentScale;
+
+					SAFE_RELEASE(pParentTr);
+				}
+
+				bool bFrustumCull = pMainCamera->FrustumInSphere(vCenter, fRadius);
+
+				SAFE_RELEASE(pMainCamera);
+				SAFE_RELEASE(pMainCamObj);
+				SAFE_RELEASE(pTPCamera);
+
+				_pObject->SetFrustumCulling(!bFrustumCull);			// 프러스텀 여부 셋팅
+
+				if (false == bFrustumCull)
+				{
+					SAFE_RELEASE(pMesh);
+					SAFE_RELEASE(pMaterial);
+					SAFE_RELEASE(pRenderer);
+					return;
+				}
 			}
 		}
 		else

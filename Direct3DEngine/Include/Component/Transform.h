@@ -87,8 +87,12 @@ private:
 	Vector3 m_vWorldAxis[AXIS_END];
 	Vector3 m_vWorldView;
 	Vector3 m_vMove;
+	bool m_bLookAt;
 	Transform* m_pLookAt;			// 바라보는 방향
 	LOOKAT_AXIS m_eLookAxis;
+
+public:
+	void SetLookAtActive(bool _Active);
 
 public:
 	Vector3 GetWorldPosition()	const;

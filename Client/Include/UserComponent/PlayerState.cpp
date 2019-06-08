@@ -17,26 +17,26 @@
 #include "Component\TPCamera.h"
 
 
-void Player::Idle()
+void Player::Idle(float _fTime)
 {
 	AnimationChange("Wait");
 	AnimationPivotMove();
 }
 
 
-void Player::Run()
+void Player::Run(float _fTime)
 {
 	AnimationChange("AdvLeap");
 	AnimationPivotMove();
 }
 
-void Player::Wait()
+void Player::Wait(float _fTime)
 {
 	AnimationChange("Wait");
 	AnimationPivotMove();
 }
 
-void Player::Death()
+void Player::Death(float _fTime)
 {
 	PANIMATIONCLIP CurClip = m_pBodyAnimation->GetCurrentClip();
 
@@ -53,23 +53,23 @@ void Player::Death()
 	}
 }
 
-void Player::DeathWait()
+void Player::DeathWait(float _fTime)
 {
 	return;
 }
 
-void Player::NockBack()
+void Player::NockBack(float _fTime)
 {
 	// 넉백은 애니메이션이 3개로 이뤄짐
 	AnimationChange("DeathWait");
 }
 
-void Player::Groggy()
+void Player::Groggy(float _fTime)
 {
 	AnimationChange("Groggy1");
 }
 
-void Player::Tumbling()
+void Player::Tumbling(float _fTime)
 {
 	AnimationChange("Tumbling");
 
@@ -79,30 +79,29 @@ void Player::Tumbling()
 // 스킬들은 각 애니메이션 끝프레임에 도달 했을 경우
 // 위치가 이동 되었을 경우 캐릭터를 이동 시킨 후에 Idle 상태로 바꾼다.
 
-void Player::Skill01()
+void Player::Skill01(float _fTime)
 {
 	// CuttingSlash
-
 	// 끝프레임 -> Idle로 전환
 	ChangeSkillToIdle();
 
 }
 
-void Player::Skill02()
+void Player::Skill02(float _fTime)
 {
 	// StingerBlade
 	ChangeSkillToIdle();
 
 }
 
-void Player::Skill03()
+void Player::Skill03(float _fTime)
 {
 	// RisingAttack
 	ChangeSkillToIdle();
 
 }
 
-void Player::Skill04()
+void Player::Skill04(float _fTime)
 {
 	// WindCutter1R -> WindCutter1
 	PANIMATIONCLIP pCurClip = m_pBodyAnimation->GetCurrentClip();
@@ -118,16 +117,17 @@ void Player::Skill04()
 	{
 		ChangeSkillToIdle();
 	}
+
 }
 
-void Player::Skill05()
+void Player::Skill05(float _fTime)
 {
 	// WindCutter3
 	ChangeSkillToIdle();
 
 }
 
-void Player::Combo1()
+void Player::Combo1(float _fTime)
 {
 	// Combo1R -> Combo1 
 	PANIMATIONCLIP pCurClip = m_pBodyAnimation->GetCurrentClip();
@@ -155,21 +155,21 @@ void Player::Combo1()
 
 }
 
-void Player::Combo2()
+void Player::Combo2(float _fTime)
 {
 	// Combo2R -> Combo2
 	AnimationChange("Combo2R");
 
 }
 
-void Player::Combo3()
+void Player::Combo3(float _fTime)
 {
 	// Combo3R -> Combo3
 	AnimationChange("Combo3R");
 
 }
 
-void Player::Combo4()
+void Player::Combo4(float _fTime)
 {
 	// Combo4
 	AnimationChange("Combo4");

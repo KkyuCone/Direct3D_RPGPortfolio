@@ -134,63 +134,63 @@ int Player::Update(float _fTime)
 	switch (m_ePlayerState)
 	{
 	case IDLE:
-		Idle();
+		Idle(_fTime);
 		break;
 	case RUN:
-		Run();
+		Run(_fTime);
 		break;
 	case WAIT:
-		Wait();
+		Wait(_fTime);
 		break;
 	case DEATH:
-		Death();
+		Death(_fTime);
 		break;
 	case DEATHWAIT:
-		DeathWait();
+		DeathWait(_fTime);
 		break;
 	case KNOCKBACK:
-		NockBack();
+		NockBack(_fTime);
 		break;
 	case GROGGY:
-		Groggy();
+		Groggy(_fTime);
 		break;
 	case TUMBLING:
-		Tumbling();
+		Tumbling(_fTime);
 		break;
 	case SKILL01:
-		Skill01();
+		Skill01(_fTime);
 		break;
 	case SKILL02:
-		Skill02();
+		Skill02(_fTime);
 		break;
 	case SKILL03:
-		Skill03();
+		Skill03(_fTime);
 		break;
 	case SKILL04:
-		Skill04();
+		Skill04(_fTime);
 		break;
 	case SKILL05:
-		Skill05();
+		Skill05(_fTime);
 		break;
 	case COMBO1:
 	case COMBO1R:
-		Combo1();
+		Combo1(_fTime);
 		break;
 	case COMBO2:
 	case COMBO2R:
-		Combo2();
+		Combo2(_fTime);
 		break;
 	case COMBO3:
 	case COMBO3R:
-		Combo3();
+		Combo3(_fTime);
 		break;
 	case COMBO4:
-		Combo4();
+		Combo4(_fTime);
 		break;
 	default:
 		break;
 	}
-
+	ReNavLateUpdate(_fTime);
 	return 0;
 }
 

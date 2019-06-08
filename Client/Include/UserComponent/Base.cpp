@@ -8,6 +8,8 @@ Base::Base()
 
 Base::Base(const Base & _Base): UserComponent(_Base)
 {
+	*this = _Base;
+	m_iReferenceCount = 1;
 }
 
 

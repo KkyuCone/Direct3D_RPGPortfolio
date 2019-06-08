@@ -144,11 +144,11 @@ bool Scene::Init()
 
 	// 씬엔 최소한 카메라가 하나 존재해야한다. (그래야 보임)
 	// 그래서 맨처음에 넣어준 카메라를 메인카메라로 지정한다. 추후에 바꿀 수 있음
-	//AddCamera("MainCamera", Vector3(0.0f, 0.0f, -5.0f), Vector3::Zero, CAM_PERSPECTIVE,
-	//	_RESOLUTION.iWidth, _RESOLUTION.iHeight, 90.0f, 0.03f, 1000.0f);
-
-	AddCamera("MainCamera", Vector3(0.0f, 15.0f, -50.0f), Vector3::Zero, CAM_PERSPECTIVE,
+	AddCamera("MainCamera", Vector3(0.0f, 0.0f, -5.0f), Vector3::Zero, CAM_PERSPECTIVE,
 		_RESOLUTION.iWidth, _RESOLUTION.iHeight, 90.0f, 0.03f, 1000.0f);
+
+	//AddCamera("MainCamera", Vector3(0.0f, 15.0f, -50.0f), Vector3::Zero, CAM_PERSPECTIVE,
+	//	_RESOLUTION.iWidth, _RESOLUTION.iHeight, 90.0f, 0.03f, 1000.0f);
 
 	// UI 카메라 - 직교 투영
 	AddCamera("UICamera", Vector3(0.0f, 0.0f, 0.0f), Vector3::Zero, CAM_ORTHOGONAL,

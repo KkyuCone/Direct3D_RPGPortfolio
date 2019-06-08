@@ -11,6 +11,7 @@
 #include "Component/Particle.h"
 #include "Component/AnimationFrame.h"
 #include "Component/UIButton.h"
+#include "Component\UIBar.h"
 #include "Component/LandScape.h"
 #include "Component/UIText.h"
 #include "Component/AudioSound.h"
@@ -35,28 +36,34 @@ TitleScene::~TitleScene()
 bool TitleScene::Init()
 {
 	Layer* pDefaultLayer = m_pScene->FindLayer("Default");
-
 	Layer*	pUILayer = m_pScene->FindLayer("UI");
 
-	GameObject*	pStartButtonObj = GameObject::CreateObject("StartButton",
-		pUILayer);
-
+	GameObject*	pStartButtonObj = GameObject::CreateObject("StartButton", pUILayer);
 	Transform*	pTr = pStartButtonObj->GetTransform();
-
-	//pTr->SetWorldPosition(_RESOLUTION.iWidth / 2.f - 100.f, _RESOLUTION.iHeight / 2.f - 50.f, 0.f);
-
 	pTr->SetWorldPosition(_RESOLUTION.iWidth / 3.f - 100.f, _RESOLUTION.iHeight / 4.f - 50.f, 0.f);
-
 	SAFE_RELEASE(pTr);
 
 	UIButton*	pStartButton = pStartButtonObj->AddComponent<UIButton>("StartButton");
-
 	pStartButton->SetStateTexture(BS_NORMAL, "StartButton", TEXT("Start.png"));
+	//pStartButton->SetStateTexture(BS_NORMAL, "StartButton", TEXT("GageBar_I3.tga"), PATH_UI_GAGEBAR);
 	pStartButton->SetCallBackFunc(BS_CLICK, this, &TitleScene::SceneChangeButton);
 
 	SAFE_RELEASE(pStartButton);
-
 	SAFE_RELEASE(pStartButtonObj);
+
+	// 일반 이미지띄우기
+	GameObject*	pHPBarObj = GameObject::CreateObject("HPBar", pUILayer);
+	Transform*	pHPTr = pHPBarObj->GetTransform();
+	pHPTr->SetWorldPosition(_RESOLUTION.iWidth / 2.f - 100.f, _RESOLUTION.iHeight / 2.f - 50.f, 0.f);
+	SAFE_RELEASE(pHPTr);
+
+	UIBar*	pHPBar = pHPBarObj->AddComponent<UIBar>("HPBar");
+	pHPBar->SetTexture("HPBar", TEXT("GageBar_IC.tga"), PATH_UI_GAGEBAR);
+	pHPBar->SetShader(SHADER_UI_BAR);
+	//pStartButton->SetStateTexture(BS_NORMAL, "StartButton", TEXT("GageBar_I3.tga"), PATH_UI_GAGEBAR);
+
+	SAFE_RELEASE(pHPBar);
+	SAFE_RELEASE(pHPBarObj);
 
 
 	// 텍스트

@@ -535,6 +535,7 @@ bool GameObject::ParentEnable() const
 
 void GameObject::SetBoneSoket(std::string _strBoneName)
 {
+	// 부모가 있는애랑 없는애 나눠서 찾기
 	if (false == m_bParent)
 		return;
 

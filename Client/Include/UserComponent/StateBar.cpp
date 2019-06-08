@@ -1,4 +1,11 @@
 #include "StateBar.h"
+#include "Scene/Scene.h"
+#include "Scene/SceneManager.h"
+#include "Device.h"
+#include "Scene/Layer.h"
+#include "GameObject.h"
+#include "Component/Transform.h"
+#include "Component/Material.h"
 
 StateBar::StateBar() :
 	m_fRatio(1.0f),
@@ -10,14 +17,18 @@ StateBar::StateBar() :
 	m_State.m_iMin = 0;
 }
 
-StateBar::StateBar(const StateBar & _StateBar)
+StateBar::StateBar(const StateBar & _StateBar) : UserComponent(_StateBar)
 {
+	*this = _StateBar;
+	m_iReferenceCount = 1;
+
 	m_fRatio = 1.0f;
 	m_State.m_iCur = _StateBar.m_State.m_iCur;
 	m_State.m_iMax = _StateBar.m_State.m_iMax;
 	m_State.m_iMin = _StateBar.m_State.m_iMin;
 
-	m_StateBar = nullptr;
+	//m_StateBar = nullptr;
+	m_StateBar = _StateBar.m_StateBar;
 	m_StateText = nullptr;
 }
 

@@ -17,6 +17,7 @@ protected:
 	virtual ~TPCamera();
 
 private:
+	class GameObject*	m_pTargetObj;
 	class Transform*	m_pTarget;				// 타겟의 위치
 	Vector3				m_vDistance;			// 타겟을 바라보는 방향
 	bool				m_bMouseEnable;			// 마우스 존재여부
@@ -32,6 +33,9 @@ public:
 	void SetMouseEnable(bool _bEnable);
 	void SetSoketMoveEnable(bool _bEnable);
 	void SetBaseNoneMoveEnable(bool _bEnable);
+
+public:
+	GameObject* GetTargetObject();
 
 public:
 	virtual void Start();			

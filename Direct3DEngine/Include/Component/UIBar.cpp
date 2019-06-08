@@ -159,5 +159,5 @@ void UIBar::DefaultBarInit()
 	m_pRenderer->SetShader(SHADER_UI_BAR);
 
 	m_pMaterial = AddComponent<Material>("BarMaterial");
-	m_pMaterial->AddTextureSet(0, 0, 0, "BarDefault", TEXT("HP.png"), PATH_UI_BAR);
+	m_pMaterial->AddTextureSet(0, 0, 0, "BarDefault", TEXT("UIDefault.png"), PATH_UI_BUTTON);
 }

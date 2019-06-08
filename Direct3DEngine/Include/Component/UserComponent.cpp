@@ -12,6 +12,7 @@ UserComponent::UserComponent(const UserComponent & _Component) : Component(_Comp
 	// 복사생성자로.. Clone역할을 맡는데
 	// 복사본이니까 ReferenceCount를 1로 고정시킨다.
 	// 그렇지 않으면 원본에 이어 증가되기 때문에 프로그램 종료시 소멸자에서 삭제되지 않아 릭이 발생한다.
+	*this = _Component;
 	m_iReferenceCount = 1;
 }
 

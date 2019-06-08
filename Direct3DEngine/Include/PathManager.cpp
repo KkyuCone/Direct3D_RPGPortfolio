@@ -64,6 +64,15 @@ bool PathManager::Init()
 	CreatePath(PATH_UI_IMAGE, TEXT("Texture\\UI\\Image\\"));
 	CreatePath(PATH_UI_BUTTON, TEXT("Texture\\UI\\Button\\"));
 	CreatePath(PATH_UI_BAR, TEXT("Texture\\UI\\Bar\\"));
+	CreatePath(PATH_UI_GAGEBAR, TEXT("Texture\\UI\\GageBar\\"));
+	CreatePath(PATH_UI_SKILL, TEXT("Texture\\UI\\Skill\\"));
+	CreatePath(PATH_UI_SKILL_ICON, TEXT("Texture\\UI\\Skill\\Icon\\"));
+	CreatePath(PATH_UI_SKILL_TERA_ICON, TEXT("Texture\\UI\\Skill\\Icon_Tera\\"));
+	CreatePath(PATH_UI_QUEST, TEXT("Texture\\UI\\Quest\\"));
+	CreatePath(PATH_UI_NUMBER, TEXT("Texture\\UI\\Number\\"));
+	CreatePath(PATH_UI_MENU, TEXT("Texture\\UI\\Menu\\"));
+	CreatePath(PATH_UI_INVENTORY, TEXT("Texture\\UI\\Inventory\\"));
+	CreatePath(PATH_UI_SCROLLBAR, TEXT("Texture\\UI\\ScrollBar\\"));
 
 	// 메쉬 경로
 	CreatePath(PATH_MESH, TEXT("Mesh\\"));

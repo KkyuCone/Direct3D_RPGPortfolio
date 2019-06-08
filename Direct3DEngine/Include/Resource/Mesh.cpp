@@ -172,7 +172,7 @@ bool Mesh::LoadMesh(const std::string & _strName, const TCHAR * _pFileName, cons
 	// strFullPath + _pFileName
 	lstrcat(strFullPath, _pFileName);
 
-	return LoadMeshFromFullPath(_strName, strFullPath);
+	return LoadMeshFromFullPath(_strName, strFullPath, _vView);
 }
 
 bool Mesh::LoadMesh(const std::string & _strName, const char * _pFileName, const Vector3 & _vView, const std::string & _strPathName)
@@ -190,7 +190,7 @@ bool Mesh::LoadMesh(const std::string & _strName, const char * _pFileName, const
 	// strFullPath + _pFileName
 	strcat_s(strFullPath, _pFileName);
 
-	return LoadMeshFromFullPath(_strName, strFullPath);
+	return LoadMeshFromFullPath(_strName, strFullPath, _vView);
 
 	return true;
 }
@@ -204,7 +204,7 @@ bool Mesh::LoadMeshFromFullPath(const std::string & _strName, const TCHAR * _pFu
 	WideCharToMultiByte(CP_UTF8, 0, _pFullPath, -1,
 		strFullPath, lstrlen(_pFullPath), 0, 0);
 
-	return LoadMeshFromFullPath(_strName, strFullPath);
+	return LoadMeshFromFullPath(_strName, strFullPath, _vView);
 }
 
 bool Mesh::LoadMeshFromFullPath(const std::string & _strName, const char * _pFullPath, const Vector3 & _vView)

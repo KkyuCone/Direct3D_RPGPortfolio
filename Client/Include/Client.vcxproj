@@ -146,7 +146,9 @@
   <ItemGroup>
     <ClInclude Include="Client.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SceneComponent\EndingScene.h" />
     <ClInclude Include="SceneComponent\MainScene.h" />
+    <ClInclude Include="SceneComponent\MapToolScene.h" />
     <ClInclude Include="SceneComponent\TitleScene.h" />
     <ClInclude Include="UserComponent\Base.h" />
     <ClInclude Include="UserComponent\BisqueLady.h" />
@@ -171,7 +173,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SceneComponent\EndingScene.cpp" />
     <ClCompile Include="SceneComponent\MainScene.cpp" />
+    <ClCompile Include="SceneComponent\MapToolScene.cpp" />
     <ClCompile Include="SceneComponent\TitleScene.cpp" />
     <ClCompile Include="UserComponent\Base.cpp" />
     <ClCompile Include="UserComponent\BisqueLady.cpp" />

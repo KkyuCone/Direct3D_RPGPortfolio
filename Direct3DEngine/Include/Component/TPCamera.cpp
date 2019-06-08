@@ -10,7 +10,8 @@ TPCamera::TPCamera() :
 	m_pTarget(nullptr),
 	m_bMouseEnable(false),
 	m_bSoketMove(false),
-	m_bBaseNoneMove(true)
+	m_bBaseNoneMove(true),
+	m_pTargetObj(nullptr)
 {
 	m_eComponentType = CT_TPCAMERA;
 }
@@ -32,7 +33,7 @@ void TPCamera::SetTarget(GameObject * _pTarget)
 {
 	SAFE_RELEASE(m_pTarget);
 	m_pTarget = _pTarget->GetTransform();
-
+	m_pTargetObj = _pTarget;
 	if (0.0f == m_vDistance.Length())
 	{
 		m_vDistance = m_pTarget->GetWorldPosition() - m_pTransform->GetWorldPosition();		// 방향 구했음
@@ -68,6 +69,11 @@ void TPCamera::SetSoketMoveEnable(bool _bEnable)
 void TPCamera::SetBaseNoneMoveEnable(bool _bEnable)
 {
 	m_bBaseNoneMove = _bEnable;
+}
+
+GameObject * TPCamera::GetTargetObject()
+{
+	return m_pTargetObj;
 }
 
 void TPCamera::Start()

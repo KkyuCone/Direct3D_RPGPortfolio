@@ -51,10 +51,19 @@
 
 #define PATH_DATA			"Path_Data"
 
-#define PATH_UI				"Path_UI"
-#define PATH_UI_BUTTON		"Path_UI_Button"
-#define PATH_UI_IMAGE		"Path_UI_Image"
-#define PATH_UI_BAR			"Path_UI_Bar"
+#define PATH_UI					"Path_UI"
+#define PATH_UI_BUTTON			"Path_UI_Button"
+#define PATH_UI_IMAGE			"Path_UI_Image"
+#define PATH_UI_BAR				"Path_UI_Bar"
+#define PATH_UI_GAGEBAR			"Path_UI_GageBar"
+#define PATH_UI_SKILL			"Path_UI_Skill"
+#define PATH_UI_SKILL_ICON		"Path_UI_Skill_Icon"
+#define PATH_UI_SKILL_TERA_ICON	"Path_UI_Skill_TeraIcon"
+#define PATH_UI_QUEST			"Path_UI_Quest"
+#define PATH_UI_NUMBER			"Path_UI_Number"
+#define PATH_UI_MENU			"Path_UI_Menu"
+#define PATH_UI_INVENTORY		"Path_UI_Inventory"
+#define PATH_UI_SCROLLBAR		"Path_UI_Scrollbar"
 
 #define PATH_EXCEL			"Path_Excel"
 

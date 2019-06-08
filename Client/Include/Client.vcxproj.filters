@@ -67,6 +67,9 @@
     <Filter Include="02. UserComponent\02.Character\02. Enemy\01.General\03. EnchantedDoll">
       <UniqueIdentifier>{bdea4466-61f7-44ae-8699-0b313fd301db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="01.SceneComponent\05. MapTool">
+      <UniqueIdentifier>{b2f2f3c2-07ba-4511-a534-1e92650d5d06}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -113,6 +116,12 @@
     </ClInclude>
     <ClInclude Include="UserComponent\EnchantedDoll.h">
       <Filter>02. UserComponent\02.Character\02. Enemy\01.General\03. EnchantedDoll</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneComponent\MapToolScene.h">
+      <Filter>01.SceneComponent\05. MapTool</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneComponent\EndingScene.h">
+      <Filter>01.SceneComponent\04. End</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -173,6 +182,12 @@
     </ClCompile>
     <ClCompile Include="UserComponent\EnchantedDoll.cpp">
       <Filter>02. UserComponent\02.Character\02. Enemy\01.General\03. EnchantedDoll</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneComponent\MapToolScene.cpp">
+      <Filter>01.SceneComponent\05. MapTool</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneComponent\EndingScene.cpp">
+      <Filter>01.SceneComponent\04. End</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

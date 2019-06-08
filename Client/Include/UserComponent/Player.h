@@ -158,25 +158,25 @@ private:
 
 private:
 	// 상태에 따른 함수
-	void Idle();
-	void Run();
-	void Wait();
-	void Death();
-	void DeathWait();
-	void NockBack();
-	void Groggy();
-	void Tumbling();
+	void Idle(float _fTime);
+	void Run(float _fTime);
+	void Wait(float _fTime);
+	void Death(float _fTime);
+	void DeathWait(float _fTime);
+	void NockBack(float _fTime);
+	void Groggy(float _fTime);
+	void Tumbling(float _fTime);
 
-	void Skill01();
-	void Skill02();
-	void Skill03();
-	void Skill04();
-	void Skill05();
+	void Skill01(float _fTime);
+	void Skill02(float _fTime);
+	void Skill03(float _fTime);
+	void Skill04(float _fTime);
+	void Skill05(float _fTime);
 
-	void Combo1();
-	void Combo2();
-	void Combo3();
-	void Combo4();
+	void Combo1(float _fTime);
+	void Combo2(float _fTime);
+	void Combo3(float _fTime);
+	void Combo4(float _fTime);
 
 	// 피봇 변화에 따른 3인칭 카메라 위치 이동 (마지막 프레임일때 이동 )
 	void AnimationPivotMove();

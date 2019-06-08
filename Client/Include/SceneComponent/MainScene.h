@@ -8,10 +8,13 @@
 #include "Component\Particle.h"
 #include "Component\AnimationFrame.h"
 #include "Component\LandScape.h"
+#include "Component\UIBar.h"
+#include "Component\UIText.h"
 #include "..\UserComponent\Player.h"
 #include "..\UserComponent\PlayerHead.h"
 #include "..\UserComponent\Weapon.h"
 #include "..\UserComponent\Monster.h"
+#include "..\UserComponent\HookaFootmanA.h"
 #include "..\UserComponent\Bullet.h"
 #include "..\UserComponent\StateBar.h"
 #include "..\UserComponent\PlayerCameraPivot.h"
@@ -35,12 +38,21 @@ private:
 	GameObject* pLandScapeObject;
 	GameObject* pMainCameraObject;
 
+	GameObject* pHookaObject;
+	GameObject* pHookaPivotObject;
+
 	// UI
 	GameObject* pHPBarUIObj;
 	GameObject* pMPBarUIObj;
+	GameObject* pEXPBarUIObj;
 
 	GameObject* pHPText;
 	GameObject* pMPText;
+	GameObject* pEXPText;
+
+	UIBar* m_pHPUIBar;
+	UIBar* m_pMPUIBar;
+	UIBar* m_pEXPUIBar;
 
 private:
 	// 스크립트
@@ -51,6 +63,7 @@ private:
 
 	StateBar* pHpBarScript;
 	StateBar* pMPBarScript;
+	//StateBar* pEXPBarScript;
 
 public:
 	MainScene();

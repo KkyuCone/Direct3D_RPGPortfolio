@@ -14,7 +14,6 @@
 #include "Navigation\NavigationManager.h"
 #include "Navigation\NavigationMesh.h"
 
-
 HookaFootmanA::HookaFootmanA() :
 	m_fSpeed(10.0f)
 	, m_pHookaRenderer(nullptr)
@@ -24,6 +23,7 @@ HookaFootmanA::HookaFootmanA() :
 	, m_pTraceCollider(nullptr)
 	, m_pPlayerTrnasform(nullptr)
 	, m_pNavigation(nullptr)
+	, m_pPivotObj(nullptr)
 {
 	m_eState = BaseState::IDLE;
 
@@ -32,10 +32,20 @@ HookaFootmanA::HookaFootmanA() :
 	m_tUIState.m_iMP = 1;
 	m_tUIState.m_iCurEXP = 100;
 	m_tUIState.m_iMaxEXP = 100;
+
+	m_fCurWalkTime = 0.0f;
+	m_fWalkTime = 0.0f;
 }
 
-HookaFootmanA::HookaFootmanA(const HookaFootmanA & _HookaFootmanA)
+HookaFootmanA::HookaFootmanA(const HookaFootmanA & _HookaFootmanA) : Base(_HookaFootmanA)
 {
+	*this = _HookaFootmanA;
+	m_iReferenceCount = 1;
+
+	m_pHookaMaterial = nullptr;
+	m_pHookaRenderer = nullptr;
+	m_pHookaAnimation = nullptr;
+	m_pNavigation = nullptr;
 }
 
 
@@ -53,20 +63,48 @@ HookaFootmanA::~HookaFootmanA()
 	SAFE_RELEASE(m_pSphereCollider);
 
 	SAFE_RELEASE(m_pNavigation);
+
+	//SAFE_RELEASE(m_pPivotObj);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
 void HookaFootmanA::Start()
 {
+	SAFE_RELEASE(m_pHookaRenderer);
+	m_pHookaRenderer = m_pGameObject->FindComponentFromType<Renderer>(CT_RENDERER);
+
+	SAFE_RELEASE(m_pHookaMaterial);
+	m_pHookaMaterial = m_pGameObject->FindComponentFromType<Material>(CT_MATERIAL);
+
+	SAFE_RELEASE(m_pHookaAnimation);
+	m_pHookaAnimation = m_pGameObject->FindComponentFromType<Animation>(CT_ANIMATION);
+
+	SAFE_RELEASE(m_pNavigation);
+	m_pNavigation = m_pGameObject->FindComponentFromType<Navigation>(CT_NAVIGATION);
+
+	if (nullptr != m_pNavigation)
+	{
+		SAFE_RELEASE(m_pTraceCollider);
+		m_pTraceCollider = m_pGameObject->FindComponentFromTag<ColliderSphere>("Trace");
+
+		m_pTraceCollider->SetCallback<HookaFootmanA>(CCBS_ENTER, this, &HookaFootmanA::Trace);
+		m_pTraceCollider->SetCallback<HookaFootmanA>(CCBS_EXIT, this, &HookaFootmanA::TraceExit);
+		m_pTraceCollider->SetScaleEnable(false);
+	}
+
+	SAFE_RELEASE(m_pSphereCollider);
+	m_pSphereCollider = m_pGameObject->FindComponentFromTag<ColliderSphere>("HookaCol");
+
+	m_pTransform->SetLookAtActive(false);
 }
 
 bool HookaFootmanA::Init()
 {
-	m_pTransform->SetWorldScale(1.0f, 1.0f, 1.0f);
+	m_pTransform->SetWorldScale(0.08f, 0.08f, 0.08f);
 
 	m_pHookaRenderer = m_pGameObject->AddComponent<Renderer>("HookaRenderer");
-	m_pHookaRenderer->SetMesh("MonsterHooka", TEXT("HookaFootman_A.msh"), Vector3::Axis[AXIS_Z], PATH_MESH);
+	m_pHookaRenderer->SetMesh("MonsterHooka", TEXT("HookaFootman_A.msh"), Vector3::Axis[AXIS_X], PATH_MESH);
 
 	m_pHookaMaterial = m_pGameObject->FindComponentFromType<Material>(CT_MATERIAL);
 
@@ -113,34 +151,34 @@ int HookaFootmanA::Update(float _fTime)
 	switch (m_eState)
 	{
 	case IDLE:
-		Idle();
+		Idle(_fTime);
 		break;
 	case WALK:
-		Walk();
+		Walk(_fTime);
 		break;
 	case RUN:
-		Run();
+		Run(_fTime);
 		break;
 	case WAIT:
-		Wait();
+		Wait(_fTime);
 		break;
 	case TALK:
-		Talk();
+		Talk(_fTime);
 		break;
 	case DANCE_Q:
-		Dance_Q();
+		Dance_Q(_fTime);
 		break;
 	case DEATH:
-		Death();
+		Death(_fTime);
 		break;
 	case DEATHWAIT:
-		DeathWait();
+		DeathWait(_fTime);
 		break;
 	case ATK01:
-		Attack01();
+		Attack01(_fTime);
 		break;
 	case ATK02:
-		Attack02();
+		Attack02(_fTime);
 		break;
 	default:
 		break;
@@ -150,6 +188,9 @@ int HookaFootmanA::Update(float _fTime)
 
 int HookaFootmanA::LateUpdate(float _fTime)
 {
+	// 피봇이 이동되는 애니메이션의 경우 해당 오브젝트를 
+	// 끝 프레임에서 이동시켜준다.
+	MovePivotPos(_fTime);
 	return 0;
 }
 
@@ -175,7 +216,7 @@ HookaFootmanA * HookaFootmanA::Clone() const
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-void HookaFootmanA::Idle()
+void HookaFootmanA::Idle(float _fTime)
 {
 	// Idle -> Run, Walk(자유 이동), Wait, Talk 
 	ChangeAnimation("Idle");
@@ -183,17 +224,20 @@ void HookaFootmanA::Idle()
 	if (true == m_pHookaAnimation->IsAnimationEnd())
 	{
 		// 랜덤 - Walk, Wait, Talk 로 상태변경
-		int RandomNum = rand() % 3;
+		int RandomNum = rand() % 5;
 
 		switch (RandomNum)
 		{
 		case 0:
-			m_eState = BaseState::WALK;
-			break;
 		case 1:
+		case 2:
+			m_eState = BaseState::WALK;
+			SetWalkStateDir();
+			break;
+		case 3:
 			m_eState = BaseState::WAIT;
 			break;
-		case 2:
+		case 4:
 			m_eState = BaseState::TALK;
 			break;
 		default:
@@ -202,87 +246,80 @@ void HookaFootmanA::Idle()
 	}
 }
 
-void HookaFootmanA::Walk()
+void HookaFootmanA::Walk(float _fTime)
 {
 	// Walk -> Walk(다른방향 or 같은방향), Idle, Run
 	ChangeAnimation("Walk");
 
 	// Walk애니메이션에서 끝에 도달했을 때 60% 확률로 또 걷게 한다.
-	if (true == m_pHookaAnimation->IsAnimationEnd())
-	{
-		int RandomNum = rand() % 3;
 
-		switch (RandomNum)
+	if (m_fCurWalkTime >= m_fWalkTime)
+	{
+		std::random_device seed;
+		std::default_random_engine eng(seed());
+		std::bernoulli_distribution Check(0.6f);
+		bool bReWalk = Check(eng);
+
+		if (true == bReWalk)
 		{
-		case 0:
 			m_eState = BaseState::WALK;
-			break;
-		case 1:
-			m_eState = BaseState::WALK;
-			break;
-		case 2:
+			SetWalkStateDir();
+		}
+		else
+		{
+			m_fCurWalkTime = 0.0f;
 			m_eState = BaseState::IDLE;
-			break;
-		default:
-			break;
 		}
 	}
-
-	// 배회할때는 임의의 위치를 지정해서 도달하게끔 한다.
-	// 회전은 Y 회전을 기준으로한다.
-	float fWanderRadius = 2.0f;					// 현재 위치로부터 목표 지점까지의 거리
-	int iWanderYRot = 0;
-	int iWanderYRotMin = 0;
-	int iWanderYRotMax = (rand() % 180) + 180;	// 180 ~ 360
-
-	// 랜덤 회전 방향 추출 (Y축)
-	std::uniform_int_distribution<int> YRotRange(iWanderYRotMin, iWanderYRotMax);
-	YRotRange(iWanderYRot);
-
+	else
+	{
+		m_fCurWalkTime += _fTime;
+		m_pTransform->Move(AXIS_X, 1.0f, _fTime);
+	}
 
 }
 
-void HookaFootmanA::Run()
+void HookaFootmanA::Run(float _fTime)
 {
 	// 추적 모드일때만 Run
 	ChangeAnimation("Run");
 }
 
-void HookaFootmanA::Wait()
+void HookaFootmanA::Wait(float _fTime)
 {
 	ChangeAnimation("Wait");
 	ChangeIdleState();
 }
 
-void HookaFootmanA::Talk()
+void HookaFootmanA::Talk(float _fTime)
 {
 	ChangeAnimation("Talk");
 	ChangeIdleState();
 }
 
-void HookaFootmanA::Dance_Q()
+void HookaFootmanA::Dance_Q(float _fTime)
 {
 	ChangeAnimation("DanceQ");
 	ChangeIdleState();
 }
 
-void HookaFootmanA::Death()
+void HookaFootmanA::Death(float _fTime)
 {
 	ChangeAnimation("Death");
 }
 
-void HookaFootmanA::DeathWait()
+void HookaFootmanA::DeathWait(float _fTime)
 {
 	ChangeAnimation("DeathWait");
 }
 
-void HookaFootmanA::Attack01()
+void HookaFootmanA::Attack01(float _fTime)
 {
 	ChangeAnimation("Atk01");
 	ChangeIdleState();
 }
 
-void HookaFootmanA::Attack02()
+void HookaFootmanA::Attack02(float _fTime)
 {
 	ChangeAnimation("Atk02");
 	ChangeIdleState();
@@ -299,10 +336,24 @@ void HookaFootmanA::Trace(Collider * _pSrc, Collider * _pDest, float _fTime)
 			return;
 		}
 
-		m_eState = BaseState::RUN;
-		m_pNavigation->SetAIFindPath(true);
-		m_pNavigation->SetTargetDetectTime(1.0f);
-		m_pNavigation->SetTarget((Component*)_pDest);
+		// 거리 제한
+		Transform* pDestTR = _pDest->GetTransform();
+		float fDistance = m_pTransform->GetWorldPositionAtMatrix().Distance(pDestTR->GetWorldPositionAtMatrix());
+
+		if (5.0f > fDistance)
+		{
+			RandomAttackState(_fTime);
+		}
+		else
+		{
+			m_eState = BaseState::RUN;
+			m_pTransform->SetLookAtActive(true);
+			m_pNavigation->SetAIFindPath(true);
+			m_pNavigation->SetTargetDetectTime(1.0f);
+			m_pNavigation->SetTarget((Component*)_pDest);
+		}
+
+		SAFE_RELEASE(pDestTR);
 	}
 }
 
@@ -311,6 +362,7 @@ void HookaFootmanA::TraceExit(Collider * _pSrc, Collider * _pDest, float _fTime)
 	if ("PlayerBody" == _pDest->GetTag())
 	{
 		m_eState = BaseState::IDLE;
+		m_pTransform->SetLookAtActive(false);
 		m_pNavigation->SetAIFindPath(false);
 		m_pNavigation->SetTargetDetectTime(0.0f);
 		m_pNavigation->SetTarget((Component*)nullptr);
@@ -337,10 +389,79 @@ void HookaFootmanA::ChangeAnimation(std::string _strName)
 	}
 }
 
+void HookaFootmanA::MovePivotPos(float _fTime)
+{
+	if (nullptr == m_pPivotObj)
+		return;
+
+	PANIMATIONCLIP pCurAniClip = m_pHookaAnimation->GetCurrentClip();
+
+	if ("Atk01" != pCurAniClip->strName && "Death" != pCurAniClip->strName)
+	{
+		return;
+	}
+
+	// 해당 피봇 위치로 이동
+	if (true == m_pHookaAnimation->IsAnimationEnd())
+	{
+		Transform* pPivotTR = m_pPivotObj->GetTransform();
+		m_pTransform->SetWorldPosition(pPivotTR->GetWorldPositionAtMatrix());
+		SAFE_RELEASE(pPivotTR);
+		
+		m_pNavigation->LateUpdate(_fTime);
+	}
+}
+
+void HookaFootmanA::SetWalkStateDir()
+{
+	// 배회할때는 임의의 위치를 지정해서 도달하게끔 한다.
+	// 회전은 Y 회전을 기준으로한다.
+	float fWanderRadius = 2.0f;					// 현재 위치로부터 목표 지점까지의 거리
+	int iWanderYRot = 0;
+	int iWanderYRotMin = 0;
+	int iWanderYRotMax = (rand() % 180) + 180;	// 180 ~ 360
+
+	// 랜덤 회전 방향 추출 (Y축)
+	std::uniform_int_distribution<int> YRotRange(iWanderYRotMin, iWanderYRotMax);
+	std::mt19937_64 rn;
+	iWanderYRot = YRotRange(rn);
+
+	m_pTransform->RotateY((float)iWanderYRot);
+
+	int iWalkTime = rand() % 4;
+	m_fWalkTime = (float)iWalkTime;
+
+	m_fCurWalkTime = 0.0f;
+}
+
+void HookaFootmanA::RandomAttackState(float _fTime)
+{
+	int iRandom = rand() % 2;
+
+	switch (iRandom)
+	{
+	case 0:
+		m_eState = BaseState::ATK01;
+		break;
+	case 1:
+		m_eState = BaseState::ATK02;
+		break;
+	default:
+		break;
+	}
+}
+
 void HookaFootmanA::HPCheck()
 {
 	if (m_tUIState.m_iHP < 0)
 	{
 		m_eState = BaseState::DEATH;
 	}
+}
+
+void HookaFootmanA::SetMonsterPivotObject(GameObject * _pObject)
+{
+	m_pPivotObj = _pObject;
+	//m_pPivotObj->SetParent(m_pGameObject);
+	//m_pPivotObj->SetBoneSoket("Bip01");
 }
