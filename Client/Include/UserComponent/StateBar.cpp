@@ -57,6 +57,7 @@ void StateBar::SetMin(int _iMin)
 void StateBar::SetMax(int _iMax)
 {
 	m_State.m_iMax = _iMax;
+	m_State.m_iCur = _iMax;
 }
 
 void StateBar::SetUIBar(UIBar * _Bar)

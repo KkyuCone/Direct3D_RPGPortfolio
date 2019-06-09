@@ -17,9 +17,11 @@ MainScene::MainScene() :
 	pEXPBarUIObj(nullptr),
 	pHpBarScript(nullptr),
 	pMPBarScript(nullptr),
+	pEXPBarScript(nullptr),
 	pPlayerWeaponObject(nullptr),
 	pPlayerWeaponScript(nullptr),
-	pPlayerCameraPivotScript(nullptr)
+	pPlayerCameraPivotScript(nullptr),
+	pQuickSlotBGObj(nullptr)
 {
 	pHPText = nullptr;
 	pMPText = nullptr;
@@ -59,7 +61,7 @@ MainScene::~MainScene()
 
 	SAFE_RELEASE(pHpBarScript);
 	SAFE_RELEASE(pMPBarScript);
-	//SAFE_RELEASE(pMPBarScript);
+	SAFE_RELEASE(pEXPBarScript);
 
 	SAFE_RELEASE(m_pHPUIBar);
 	SAFE_RELEASE(m_pMPUIBar);
@@ -68,6 +70,8 @@ MainScene::~MainScene()
 	SAFE_RELEASE(pHPBarUIObj);
 	SAFE_RELEASE(pMPBarUIObj);
 	SAFE_RELEASE(pEXPBarUIObj);
+
+	SAFE_RELEASE(pQuickSlotBGObj);
 }
 
 bool MainScene::Init()
@@ -406,19 +410,46 @@ bool MainScene::UIInit()
 {
 	Layer*	pUILayer = m_pScene->FindLayer("UI");
 	// UI - 상태바
-	// HP
+	// HP,MP 배경 오브젝트
+	GameObject* pHPBarBGObj = GameObject::CreateObject("StateBar_BG", pUILayer);
+	UIBar* pHPBarBG = pHPBarBGObj->AddComponent<UIBar>("StateBar_BG");
+	pHPBarBG->SetTexture("StateBar_BG", TEXT("ab2_bonus_frame02.png"), PATH_UI_GAGEBAR);
+	pHPBarBG->SetShader(SHADER_UI_BAR);
+
+	Transform* pHPBGTr = pHPBarBGObj->GetTransform();
+	pHPBGTr->SetWorldScale(738.0f, 184.8f, 1.0f);
+	pHPBGTr->SetWorldPosition(_RESOLUTION.iWidth / 2.f - 369.0f, _RESOLUTION.iHeight / 2.f - 410.f, 1.0f);
+
+	SAFE_RELEASE(pHPBarBGObj);
+	SAFE_RELEASE(pHPBarBG);
+	SAFE_RELEASE(pHPBGTr);
+
+	GameObject* pHPBarBGObj02 = GameObject::CreateObject("StateBar_BG02", pUILayer);
+	UIBar* pHPBarBG02 = pHPBarBGObj02->AddComponent<UIBar>("StateBar_BG02");
+	pHPBarBG02->SetTexture("StateBar_BG02", TEXT("ab2_bonus_frame_globe_borders.png"), PATH_UI_GAGEBAR);
+	pHPBarBG02->SetShader(SHADER_UI_BAR);
+
+	Transform* pHPBGTr02 = pHPBarBGObj02->GetTransform();
+	pHPBGTr02->SetWorldScale(166.8f, 166.8f, 1.0f);
+	pHPBGTr02->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 82.0f, _RESOLUTION.iHeight * 0.5f - 390.0f, 0.7f);
+
+	SAFE_RELEASE(pHPBarBGObj02);
+	SAFE_RELEASE(pHPBarBG02);
+	SAFE_RELEASE(pHPBGTr02);
+
+	// HP 오브젝트
 	pHPBarUIObj = GameObject::CreateObject("HPBar", pUILayer);
 	m_pHPUIBar = pHPBarUIObj->AddComponent<UIBar>("HPBar");
-	m_pHPUIBar->SetTexture("HPBarGage", TEXT("GageBar_I3.tga"), PATH_UI_GAGEBAR);
+	m_pHPUIBar->SetTexture("HPBarGage", TEXT("ab2_bonus_frame_globe_fill_red.png"), PATH_UI_GAGEBAR);
+	m_pHPUIBar->SetShader(SHADER_UI_BAR);
 	pHpBarScript = pHPBarUIObj->AddComponent<StateBar>("UI_StateBar_HP");
 	pHpBarScript->SetMin(0);
 	pHpBarScript->SetMax(10000);
 	pHpBarScript->SetUIBar(m_pHPUIBar);
 
 	Transform* pHPTr = pHPBarUIObj->GetTransform();
-	pHPTr->SetWorldScale(512.0f, 32.0f, 1.0f);
-
-	pHPTr->SetWorldPosition(_RESOLUTION.iWidth / 3.f - 100.f, _RESOLUTION.iHeight / 4.f - 50.f, 0.f);
+	pHPTr->SetWorldScale(81.0f, 162.0f, 1.0f);
+	pHPTr->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 80.0f, _RESOLUTION.iHeight * 0.5f - 389.f, 0.8f);
 
 	SAFE_RELEASE(m_pHPUIBar);
 	SAFE_RELEASE(pHpBarScript);
@@ -426,13 +457,22 @@ bool MainScene::UIInit()
 
 
 	// MP
-	//pMPBarUIObj = GameObject::CreateObject("MPBar", pDefaultLayer);
-	//pMPBarScript = pMPBarUIObj->AddComponent<StateBar>("UI_StateBar_MP");
-	//pMPBarScript->SetMin(0);
-	//pMPBarScript->SetMax(20000);
+	pMPBarUIObj = GameObject::CreateObject("MPBar", pUILayer);
+	m_pMPUIBar = pMPBarUIObj->AddComponent<UIBar>("MPBar");
+	m_pMPUIBar->SetTexture("MPBarGage", TEXT("ab2_bonus_frame_globe_fill_blue.png"), PATH_UI_GAGEBAR);
+	m_pMPUIBar->SetShader(SHADER_UI_BAR);
+	pMPBarScript = pMPBarUIObj->AddComponent<StateBar>("UI_StateBar_MP");
+	pMPBarScript->SetMin(0);
+	pMPBarScript->SetMax(10000);
+	pMPBarScript->SetUIBar(m_pMPUIBar);
 
-	//Transform* pMPTr = pMPBarUIObj->GetTransform();
-	//pMPTr->SetWorldPosition(100.0f, 250.0f, 0.0f);
+	Transform* pMPTr = pMPBarUIObj->GetTransform();
+	pMPTr->SetWorldScale(81.0f, 162.0f, 1.0f);
+	pMPTr->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 1.0f, _RESOLUTION.iHeight * 0.5f - 389.f, 0.8f);
+
+	SAFE_RELEASE(m_pMPUIBar);
+	SAFE_RELEASE(pMPBarScript);
+	SAFE_RELEASE(pMPTr);
 
 
 	////  UI - 텍스트
@@ -481,6 +521,54 @@ bool MainScene::UIInit()
 	SAFE_RELEASE(pHPTextTr);*/
 
 	//SAFE_RELEASE(pMPUIText);
+
+
+	// EXP 바
+	// HP,MP 배경 오브젝트
+	GameObject* pEXPBarBGObj = GameObject::CreateObject("EXPBar_BG", pUILayer);
+	UIBar* pEXPBarBG = pEXPBarBGObj->AddComponent<UIBar>("EXPBar_BG");
+	pEXPBarBG->SetTexture("EXPBar_BG", TEXT("ab2_xp_empty_frame.png"), PATH_UI_GAGEBAR);
+	pEXPBarBG->SetShader(SHADER_UI_BAR);
+
+	Transform* pEXPBGTr = pEXPBarBGObj->GetTransform();
+	pEXPBGTr->SetWorldScale(1711.2f, 43.2f, 1.0f);
+	pEXPBGTr->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 855.0f, _RESOLUTION.iHeight * 0.5f - 540.f, 1.0f);
+
+	SAFE_RELEASE(pEXPBarBGObj);
+	SAFE_RELEASE(pEXPBarBG);
+	SAFE_RELEASE(pEXPBGTr);
+
+	// EXP 오브젝트
+	pEXPBarUIObj = GameObject::CreateObject("EXPBar", pUILayer);
+	m_pEXPUIBar = pEXPBarUIObj->AddComponent<UIBar>("EXPBar");
+	m_pEXPUIBar->SetTexture("EXPBarGage", TEXT("ab2_xp_fill.png"), PATH_UI_GAGEBAR);
+	m_pEXPUIBar->SetShader(SHADER_UI_BAR);
+	pEXPBarScript = pEXPBarUIObj->AddComponent<StateBar>("UI_StateBar_EXP");
+	pEXPBarScript->SetMin(0);
+	pEXPBarScript->SetMax(10000);
+	pEXPBarScript->SetUIBar(m_pEXPUIBar);
+
+	Transform* pEXPTr = pEXPBarUIObj->GetTransform();
+	pEXPTr->SetWorldScale(1678.4f, 21.6f, 1.0f);
+	pEXPTr->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 841.5f, _RESOLUTION.iHeight * 0.5f - 533.f, 0.0f);
+
+	SAFE_RELEASE(m_pEXPUIBar);
+	SAFE_RELEASE(pHpBarScript);
+	SAFE_RELEASE(pEXPTr);
+
+	// 퀵슬롯
+	pQuickSlotBGObj = GameObject::CreateObject("QuickSlot_BG", pUILayer);
+
+	UIBar* pQuickSlotBG = pQuickSlotBGObj->AddComponent<UIBar>("QuickSlot_BG");
+	pQuickSlotBG->SetTexture("QuickSlot_BG", TEXT("ab2_main_frame.png"), PATH_UI_GAGEBAR);
+	pQuickSlotBG->SetShader(SHADER_UI_BAR);
+
+	Transform* pQuickSlot = pQuickSlotBGObj->GetTransform();
+	pQuickSlot->SetWorldScale(1162.2f, 139.8f, 1.0f);
+	pQuickSlot->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 590.0f, _RESOLUTION.iHeight * 0.5f - 528.f, 1.2f);
+
+	SAFE_RELEASE(pQuickSlotBG);
+	SAFE_RELEASE(pQuickSlot);
 
 	return true;
 }

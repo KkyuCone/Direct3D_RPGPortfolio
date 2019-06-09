@@ -55,6 +55,44 @@ struct CurCoolTime
 	float m_fCurCoolTime05;
 };
 
+// 아이템 타입
+enum ITEM_TYPE
+{
+	NONE = 0,
+	POTION_HP,
+	POTION_MP,
+};
+
+enum SKILL_TYPE
+{
+	NONE =0,
+};
+
+struct EnventoryType
+{
+	ITEM_TYPE eItemType;
+	SKILL_TYPE eSkillType;
+
+	EnventoryType()
+	{
+		eItemType = ITEM_TYPE::NONE;
+		eSkillType = SKILL_TYPE::NONE;
+	}
+};
+
+
+struct QuickSlotType
+{
+	ITEM_TYPE eItemType;
+	SKILL_TYPE eSkillType;
+
+	QuickSlotType()
+	{
+		eItemType = ITEM_TYPE::NONE;
+		eSkillType = SKILL_TYPE::NONE;
+	}
+};
+
 class Base : public UserComponent
 {
 public:

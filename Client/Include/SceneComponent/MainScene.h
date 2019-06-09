@@ -42,6 +42,7 @@ private:
 	GameObject* pHookaPivotObject;
 
 	// UI
+	// UI - State Bar
 	GameObject* pHPBarUIObj;
 	GameObject* pMPBarUIObj;
 	GameObject* pEXPBarUIObj;
@@ -54,6 +55,9 @@ private:
 	UIBar* m_pMPUIBar;
 	UIBar* m_pEXPUIBar;
 
+	// UI - Äü½½·Ô
+	GameObject* pQuickSlotBGObj;
+
 private:
 	// ½ºÅ©¸³Æ®
 	Player*				pPlayerScript;
@@ -63,7 +67,7 @@ private:
 
 	StateBar* pHpBarScript;
 	StateBar* pMPBarScript;
-	//StateBar* pEXPBarScript;
+	StateBar* pEXPBarScript;
 
 public:
 	MainScene();

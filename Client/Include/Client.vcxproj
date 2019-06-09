@@ -154,6 +154,7 @@
     <ClInclude Include="UserComponent\BisqueLady.h" />
     <ClInclude Include="UserComponent\EnchantedDoll.h" />
     <ClInclude Include="UserComponent\HookaFootmanA.h" />
+    <ClInclude Include="UserComponent\Inventory.h" />
     <ClInclude Include="UserComponent\PlayerCameraPivot.h" />
     <ClInclude Include="UserComponent\PlayerHead.h" />
     <ClInclude Include="UserComponent\StateBar.h" />
@@ -181,6 +182,7 @@
     <ClCompile Include="UserComponent\BisqueLady.cpp" />
     <ClCompile Include="UserComponent\EnchantedDoll.cpp" />
     <ClCompile Include="UserComponent\HookaFootmanA.cpp" />
+    <ClCompile Include="UserComponent\Inventory.cpp" />
     <ClCompile Include="UserComponent\PlayerCameraPivot.cpp" />
     <ClCompile Include="UserComponent\PlayerHead.cpp" />
     <ClCompile Include="UserComponent\PlayerState.cpp" />

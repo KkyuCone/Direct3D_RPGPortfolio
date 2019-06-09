@@ -70,6 +70,9 @@
     <Filter Include="01.SceneComponent\05. MapTool">
       <UniqueIdentifier>{b2f2f3c2-07ba-4511-a534-1e92650d5d06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. UserComponent\01. UI\02. Inventory">
+      <UniqueIdentifier>{b590f787-d1ef-43e5-8919-7b634db47eac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -122,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="SceneComponent\EndingScene.h">
       <Filter>01.SceneComponent\04. End</Filter>
+    </ClInclude>
+    <ClInclude Include="UserComponent\Inventory.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +194,9 @@
     </ClCompile>
     <ClCompile Include="SceneComponent\EndingScene.cpp">
       <Filter>01.SceneComponent\04. End</Filter>
+    </ClCompile>
+    <ClCompile Include="UserComponent\Inventory.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
