@@ -83,6 +83,7 @@ typedef struct ENGINE_DLL _tagVertexUV
 	}
 }VertexUV, *PVertexUV;
 
+
 // 디폴트 파티클 구조체  ( 기하셰이더를 이용해서 점 -> 사각형 메쉬로 확장해서 렌더할 것이다. )
 // -> 메쉬 렌더링, 빌보드이용해서 파티클 형성할거임
 typedef struct ENGINE_DLL _tagVertexDefulatParticle

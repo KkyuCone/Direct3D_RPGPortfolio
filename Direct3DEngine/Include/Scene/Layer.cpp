@@ -89,12 +89,12 @@ int Layer::Input(float _fTime)
 			++StartIter;
 			continue;
 		}
-		else if (true == (*StartIter)->ParentEnable())
-		{
-			// 부모가 존재한다면 부모 오브젝트에서 함수들을 업데이트 해줄거임
-			++StartIter;
-			continue;
-		}
+		//else if (true == (*StartIter)->ParentEnable())
+		//{
+		//	// 부모가 존재한다면 부모 오브젝트에서 함수들을 업데이트 해줄거임
+		//	++StartIter;
+		//	continue;
+		//}
 
 		(*StartIter)->Input(_fTime);
 		++StartIter;
@@ -126,6 +126,11 @@ int Layer::Update(float _fTime)
 		else if (true == (*StartIter)->ParentEnable())
 		{
 			// 부모가 존재한다면 부모 오브젝트에서 함수들을 업데이트 해줄거임
+			// UI의 경우는 제외
+			if ((*StartIter)->GetLayer()->GetTag() == "UI")
+			{
+				(*StartIter)->Update(_fTime);
+			}
 			++StartIter;
 			continue;
 		}

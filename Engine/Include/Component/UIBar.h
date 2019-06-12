@@ -30,6 +30,7 @@ public:
 	void SetRatio(const float& _fRatio);
 	void SetTexture(const std::string& _strName, const TCHAR* _pFileName, const std::string& _strPathName = PATH_TEXTURE);
 	void SetShader(const std::string& _strKey);
+	void SetRenderState(const std::string& _strKey);
 
 public:
 	virtual void Start();				// 배치될려는 레이어에 포함될때 (배치될때) 호출, 즉 레이어에서 호출해준다.

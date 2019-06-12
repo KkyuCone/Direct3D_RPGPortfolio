@@ -58,40 +58,56 @@ struct CurCoolTime
 // 아이템 타입
 enum ITEM_TYPE
 {
-	NONE = 0,
+	ITEM_NONE = 0,
 	POTION_HP,
 	POTION_MP,
 };
 
 enum SKILL_TYPE
 {
-	NONE =0,
+	SKILL_NONE =0,
+	SKILL_01,
+	SKILL_02,
+	SKILL_03,
+	SKILL_04,
+	SKILL_05,
+	CUTTING_SLASH = SKILL_01,
+	STINGER_BLADE = SKILL_02,
+	RISING_ATTCK = SKILL_03,
+	WIND_CUTTER1 = SKILL_04,
+	WIND_CUTTER5 = SKILL_05,
 };
 
-struct EnventoryType
-{
-	ITEM_TYPE eItemType;
-	SKILL_TYPE eSkillType;
+//struct InventoryType
+//{
+//	ITEM_TYPE eItemType;
+//	SKILL_TYPE eSkillType;
+//
+//	InventoryType()
+//	{
+//		eItemType = ITEM_TYPE::ITEM_NONE;
+//		eSkillType = SKILL_TYPE::SKILL_NONE;
+//	}
+//};
 
-	EnventoryType()
-	{
-		eItemType = ITEM_TYPE::NONE;
-		eSkillType = SKILL_TYPE::NONE;
-	}
-};
 
-
-struct QuickSlotType
-{
-	ITEM_TYPE eItemType;
-	SKILL_TYPE eSkillType;
-
-	QuickSlotType()
-	{
-		eItemType = ITEM_TYPE::NONE;
-		eSkillType = SKILL_TYPE::NONE;
-	}
-};
+//struct QuickSlotType
+//{
+//	ITEM_TYPE	eItemType;
+//	SKILL_TYPE	eSkillType;
+//	bool		bCoolTime;
+//	float		fCoolTime;
+//	int			iCount;
+//
+//	QuickSlotType()
+//	{
+//		eItemType = ITEM_TYPE::ITEM_NONE;
+//		eSkillType = SKILL_TYPE::SKILL_NONE;
+//		bCoolTime = false;
+//		fCoolTime = 0.0f;
+//		iCount = -1;
+//	}
+//};
 
 class Base : public UserComponent
 {

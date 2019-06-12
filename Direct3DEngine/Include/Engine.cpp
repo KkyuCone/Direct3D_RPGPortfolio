@@ -32,6 +32,19 @@ std::string TCHARToString(const TCHAR* ptsz)
 	return s;
 }
 
+// String -> TCHAR
+bool StringToTCHAR(std::string _str, TCHAR& _strDest)
+{
+	TCHAR* pRetrun = new TCHAR[_str.size() + 1];
+	pRetrun[_str.size()] = 0;
+	std::copy(_str.begin(), _str.end(), pRetrun);
+
+	_strDest = *pRetrun;
+	delete[] pRetrun;
+
+	return true;
+}
+
 // string -> wchar_t
 std::wstring  StringToLPWSTR(const std::string input)
 {
@@ -71,4 +84,17 @@ bool StringToWstring(const std::string input, std::wstring& _output)
 	delete[] t;
  
 	return true;
+}
+
+// string -> int
+int StringToInt(std::string _str)
+{
+	return (std::stoi(_str));
+}
+
+
+// int -> string
+std::string	IntToString(int _Number)
+{
+	return std::to_string(_Number);
 }

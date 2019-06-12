@@ -18,6 +18,13 @@ private:
 	static std::unordered_map<class Scene*, std::unordered_map<std::string, GameObject*>>	m_PrototypeMap;		// 프로토타입
 
 public:
+	bool m_bUpdateInstancing;					// 인스턴싱 그대로 넣을지 뺄지 여부 결정
+
+public:
+	void SetUpdateInstancing(bool _Enable);
+	bool GetUpdateInstancing();
+
+public:
 	static GameObject* CreateObject(const std::string& _NameTag = "", class Layer* _pLayer = nullptr);
 	static GameObject* CreatePrototype(const std::string& _NameTag = "", class Scene* _pScene = nullptr);
 	static GameObject* CreateClone(const std::string& _NameTag, class Scene* _pScene, class Layer* _pLayer);

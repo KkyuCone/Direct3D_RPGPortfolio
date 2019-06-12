@@ -73,6 +73,9 @@
     <Filter Include="02. UserComponent\01. UI\02. Inventory">
       <UniqueIdentifier>{b590f787-d1ef-43e5-8919-7b634db47eac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="02. UserComponent\01. UI\03. QuickSlot">
+      <UniqueIdentifier>{2ed466c3-b13c-4c3d-9986-8e8c68014955}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -127,7 +130,10 @@
       <Filter>01.SceneComponent\04. End</Filter>
     </ClInclude>
     <ClInclude Include="UserComponent\Inventory.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>02. UserComponent\01. UI\02. Inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="UserComponent\QuickSlot.h">
+      <Filter>02. UserComponent\01. UI\03. QuickSlot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -196,7 +202,10 @@
       <Filter>01.SceneComponent\04. End</Filter>
     </ClCompile>
     <ClCompile Include="UserComponent\Inventory.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>02. UserComponent\01. UI\02. Inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="UserComponent\QuickSlot.cpp">
+      <Filter>02. UserComponent\01. UI\03. QuickSlot</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

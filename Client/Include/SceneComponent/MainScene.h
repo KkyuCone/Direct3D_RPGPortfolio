@@ -18,6 +18,8 @@
 #include "..\UserComponent\Bullet.h"
 #include "..\UserComponent\StateBar.h"
 #include "..\UserComponent\PlayerCameraPivot.h"
+#include "..\UserComponent\Inventory.h"
+#include "..\UserComponent\QuickSlot.h"
 #include "CollisionManager.h"
 
 ENGINE_USING
@@ -57,6 +59,11 @@ private:
 
 	// UI - 퀵슬롯
 	GameObject* pQuickSlotBGObj;
+	QuickSlot*	pQuickSlotScript;
+
+	// UI - 인벤토리
+	GameObject* pInventoryObj;
+	Inventory* pInventoryScript;
 
 private:
 	// 스크립트

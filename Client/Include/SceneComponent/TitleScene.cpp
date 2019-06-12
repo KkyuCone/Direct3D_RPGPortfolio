@@ -11,7 +11,7 @@
 #include "Component/Particle.h"
 #include "Component/AnimationFrame.h"
 #include "Component/UIButton.h"
-#include "Component\UIBar.h"
+#include "Component/UIBar.h"
 #include "Component/LandScape.h"
 #include "Component/UIText.h"
 #include "Component/AudioSound.h"
@@ -55,6 +55,7 @@ bool TitleScene::Init()
 	GameObject*	pHPBarObj = GameObject::CreateObject("HPBar", pUILayer);
 	Transform*	pHPTr = pHPBarObj->GetTransform();
 	pHPTr->SetWorldPosition(_RESOLUTION.iWidth / 2.f - 100.f, _RESOLUTION.iHeight / 2.f - 50.f, 0.f);
+	pHPTr->SetWorldScale(10.0f, 10.0f, 1.0f);
 	SAFE_RELEASE(pHPTr);
 
 	UIBar*	pHPBar = pHPBarObj->AddComponent<UIBar>("HPBar");

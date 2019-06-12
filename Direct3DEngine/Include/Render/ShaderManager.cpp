@@ -533,6 +533,76 @@ bool ShaderManager::Init()
 	{
 		return false;
 	}
+
+	// UI 인스턴싱
+	pEntry[ST_VERTEX] = "VS_Button_Instancing";
+	pEntry[ST_PIXEL] = "PS_Button_Instancing";
+	pEntry[ST_GEOMETRY] = "";
+	pEntry[ST_COMPUTE] = "";
+
+	if (false == LoadShader(SHADER_UI_BUTTON_INSTANCING, TEXT("UI.fx"), pEntry))
+	{
+		return false;
+	}
+
+	pEntry[ST_VERTEX] = "VS_Image_Instancing";
+	pEntry[ST_PIXEL] = "PS_Image_Instancing";
+	pEntry[ST_GEOMETRY] = "";
+	pEntry[ST_COMPUTE] = "";
+
+	if (false == LoadShader(SHADER_UI_IMAGE_INSTANCING, TEXT("UI.fx"), pEntry))
+	{
+		return false;
+	}
+
+	pEntry[ST_VERTEX] = "VS_Bar_Instancing";
+	pEntry[ST_PIXEL] = "PS_Bar_Instancing";
+	pEntry[ST_GEOMETRY] = "";
+	pEntry[ST_COMPUTE] = "";
+
+	if (false == LoadShader(SHADER_UI_BAR_INSTANCING, TEXT("UI.fx"), pEntry))
+	{
+		return false;
+	}
+
+	AddInputDesc("POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 12,
+		0, D3D11_INPUT_PER_VERTEX_DATA, 0);
+	AddInputDesc("TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 8,
+		0, D3D11_INPUT_PER_VERTEX_DATA, 0);
+
+	m_iInputSize = 0;
+	AddInputDesc("WORLD", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 16,
+		1, D3D11_INPUT_PER_INSTANCE_DATA, 1);
+	AddInputDesc("WORLD", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 16,
+		1, D3D11_INPUT_PER_INSTANCE_DATA, 1);
+	AddInputDesc("WORLD", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 16,
+		1, D3D11_INPUT_PER_INSTANCE_DATA, 1);
+	AddInputDesc("WORLD", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 16,
+		1, D3D11_INPUT_PER_INSTANCE_DATA, 1);
+
+	AddInputDesc("WORLDVIEW", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 16,
+		1, D3D11_INPUT_PER_INSTANCE_DATA, 1);
+	AddInputDesc("WORLDVIEW", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 16,
+		1, D3D11_INPUT_PER_INSTANCE_DATA, 1);
+	AddInputDesc("WORLDVIEW", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 16,
+		1, D3D11_INPUT_PER_INSTANCE_DATA, 1);
+	AddInputDesc("WORLDVIEW", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 16,
+		1, D3D11_INPUT_PER_INSTANCE_DATA, 1);
+
+	AddInputDesc("WORLDVIEWROT", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 16,
+		1, D3D11_INPUT_PER_INSTANCE_DATA, 1);
+	AddInputDesc("WORLDVIEWROT", 1, DXGI_FORMAT_R32G32B32A32_FLOAT, 16,
+		1, D3D11_INPUT_PER_INSTANCE_DATA, 1);
+	AddInputDesc("WORLDVIEWROT", 2, DXGI_FORMAT_R32G32B32A32_FLOAT, 16,
+		1, D3D11_INPUT_PER_INSTANCE_DATA, 1);
+	AddInputDesc("WORLDVIEWROT", 3, DXGI_FORMAT_R32G32B32A32_FLOAT, 16,
+		1, D3D11_INPUT_PER_INSTANCE_DATA, 1);
+
+
+	if (false == CreateInputLayout(LAYOUT_UI_INSTANCING, SHADER_UI_BUTTON_INSTANCING))
+	{
+		return false;
+	}
 #pragma endregion
 
 #pragma region 포스트 프로세싱 관련

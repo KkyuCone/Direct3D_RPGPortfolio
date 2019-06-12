@@ -21,6 +21,7 @@
 #include "..\Scene\Scene.h"
 #include "..\Component\AnimationFrame.h"
 #include "..\Component\Particle.h"
+#include "..\Component\UI.h"
 #include "SSAOManager.h"
 #include "..\Scene\Layer.h"
 
@@ -69,9 +70,13 @@ RenderManager::RenderManager()
 	m_pStaticInstancingShader = nullptr;
 	m_pAnimFrameInstancingShader = nullptr;
 	m_pAnimInstancingShader = nullptr;
+	m_pUIButtonInstancingShader = nullptr;
+	m_pUIImageInstancingShader = nullptr;
+	m_pUIBarInstancingShader = nullptr;
 	m_pStaticInstancingLayout = nullptr;
 	m_pAnimFrameInstancingLayout = nullptr;
 	m_pAnimInstancingLayout = nullptr;
+	m_pUIInstancingLayout = nullptr;
 
 	m_bShadowCompute = false;
 
@@ -174,6 +179,9 @@ RenderManager::~RenderManager()
 	SAFE_RELEASE(m_pStaticInstancingShader);
 	SAFE_RELEASE(m_pAnimFrameInstancingShader);
 	SAFE_RELEASE(m_pAnimInstancingShader);
+	SAFE_RELEASE(m_pUIButtonInstancingShader);
+	SAFE_RELEASE(m_pUIImageInstancingShader);
+	SAFE_RELEASE(m_pUIBarInstancingShader);
 
 	Safe_Delete_Map(m_mapInstancingGeometry);
 
@@ -663,11 +671,17 @@ bool RenderManager::Init()
 
 void RenderManager::ShaderLyaoutInit()
 {
+	// 인스턴싱
 	m_pStaticInstancingShader = GET_SINGLETON(ShaderManager)->FindShader(SHADER_STANDARD_3D_INSTANCING);
 	m_pStaticInstancingLayout = GET_SINGLETON(ShaderManager)->FindInputLayout(LAYOUT_VERTEX3D_STATIC_INSTANCING);
 
 	m_pAnimFrameInstancingShader = GET_SINGLETON(ShaderManager)->FindShader(SHADER_PARTICLE_INSTNACING);
 	m_pAnimFrameInstancingLayout = GET_SINGLETON(ShaderManager)->FindInputLayout(LAYOUT_PARTICLE_INSTANCING);
+
+	m_pUIButtonInstancingShader = GET_SINGLETON(ShaderManager)->FindShader(SHADER_UI_BUTTON_INSTANCING);
+	m_pUIImageInstancingShader = GET_SINGLETON(ShaderManager)->FindShader(SHADER_UI_IMAGE_INSTANCING);
+	m_pUIBarInstancingShader = GET_SINGLETON(ShaderManager)->FindShader(SHADER_UI_BAR_INSTANCING);
+	m_pUIInstancingLayout = GET_SINGLETON(ShaderManager)->FindInputLayout(LAYOUT_UI_INSTANCING);
 
 	// HDR + 적응 관련
 	m_pPostEffectShader = GET_SINGLETON(ShaderManager)->FindShader(SHADER_POSTEFFECT);
@@ -1051,57 +1065,55 @@ void RenderManager::AddRenderObject(GameObject* _pObject)
 				}
 			}
 		}
-		else
+
+		if (true == _pObject->GetUpdateInstancing())
 		{
-			// UI의 경우
-		}
+			unsigned int iMeshNumber = pMesh->GetSerialNumber();			// 메쉬 식별번호 (인스턴싱)
+			unsigned int iMaterialNumber = pMaterial->GetSerialNumber();	// 머티리얼 식별번호 (인스턴싱)
 
-		unsigned int iMeshNumber = pMesh->GetSerialNumber();			// 메쉬 식별번호 (인스턴싱)
-		unsigned int iMaterialNumber = pMaterial->GetSerialNumber();	// 머티리얼 식별번호 (인스턴싱)
+																			// __int64 에 넣어주기 메쉬 / 머티리얼
+			unsigned __int64 iKey = iMeshNumber;
+			iKey <<= 32;
+			iKey |= iMaterialNumber;
 
-		// __int64 에 넣어주기 메쉬 / 머티리얼
-		unsigned __int64 iKey = iMeshNumber;
-		iKey <<= 32;
-		iKey |= iMaterialNumber;
+			PInstancingGeometry pGeometry = FindInstancingGeometry(iKey);		// 이미 있는지 검사
 
-		PInstancingGeometry pGeometry = FindInstancingGeometry(iKey);		// 이미 있는지 검사
-
-		// 없다면 새로 넣어준다.
-		if (nullptr == pGeometry)
-		{
-			pGeometry = new InstancingGeometry;
-			m_mapInstancingGeometry.insert(std::make_pair(iKey, pGeometry));
-		}
-
-		// 2D 애니메이션 여부 (프레임 애니메이션)
-		if (false != _pObject->CheckComponentFromType(CT_ANIMATIONFRAME))
-		{
-			if (false != _pObject->CheckComponentFromType(CT_PARTICLE))
+																				// 없다면 새로 넣어준다.
+			if (nullptr == pGeometry)
 			{
-				pGeometry->bAnimation2D = true;
+				pGeometry = new InstancingGeometry;
+				m_mapInstancingGeometry.insert(std::make_pair(iKey, pGeometry));
+			}
+
+			// 2D 애니메이션 여부 (프레임 애니메이션)
+			if (false != _pObject->CheckComponentFromType(CT_ANIMATIONFRAME))
+			{
+				if (false != _pObject->CheckComponentFromType(CT_PARTICLE))
+				{
+					pGeometry->bAnimation2D = true;
+				}
+				else
+				{
+					pGeometry->bAnimation2D = false;
+				}
+			}
+			else if (false != _pObject->CheckComponentFromType(CT_ANIMATION))
+			{
+				pGeometry->bAnimation3D = true;
 			}
 			else
 			{
 				pGeometry->bAnimation2D = false;
+				pGeometry->bAnimation3D = false;
 			}
-		}
-		else if (false != _pObject->CheckComponentFromType(CT_ANIMATION))
-		{
-			pGeometry->bAnimation3D = true;
-		}
-		else
-		{
-			pGeometry->bAnimation2D = false;
-			pGeometry->bAnimation3D = false;
-		}
 
-
-		pGeometry->Add(_pObject);		// 오브젝트 넣어주기
-
+			pGeometry->Add(_pObject);		// 오브젝트 넣어주기
+		}
 		SAFE_RELEASE(pMesh);
 		SAFE_RELEASE(pMaterial);
 		SAFE_RELEASE(pRenderer);
 	}
+
 
 	// 렌더 그룹별로 오브젝트 리스트들 넣어주기 ㅇㅅㅇ
 	if (m_tRenderGroup[RG].iSize == m_tRenderGroup[RG].iCapacity)
@@ -1501,7 +1513,7 @@ void RenderManager::ComputeInstancing()
 			}
 			else
 			{
-				// 스태틱 메쉬
+				// 스태틱 메쉬, UI 처리해야됨
 				if (pGeometry->iSize > m_pStaticInstancing->iCount)
 				{
 					ResizeInstancingBuffer(m_pStaticInstancing, pGeometry->iSize);
@@ -1643,14 +1655,8 @@ void RenderManager::RenderDeferred(float _fTime)
 	pDepthTarget->ResetShader(11);
 
 
-	// UI쪽 부분 렌더 (지금은 안쓰는중..)
-	for (int i = RG_HUD; i < RG_END; ++i)
-	{
-		for (int j = 0; j < m_tRenderGroup[i].iSize; ++j)
-		{
-			m_tRenderGroup[i].pObjectList[j]->Render(_fTime);
-		}
-	}
+	// UI 렌더
+	RenderUI(_fTime);
 
 	// 그룹 사이즈 0으로..
 	for (int i = 0; i < RG_END; ++i)
@@ -2363,6 +2369,125 @@ void RenderManager::RenderDepthFog(float _fTime)
 	}
 }
 
+void RenderManager::RenderUI(float _fTime)
+{
+	// UI쪽 부분 렌더 (지금은 안쓰는중..)
+	RenderInstancingUI(_fTime);
+
+	for (int i = RG_HUD; i < RG_END; ++i)
+	{
+		// 인스턴싱 아닌애들
+		for (int j = 0; j < m_tRenderGroup[i].iSize; ++j)
+		{
+			m_tRenderGroup[i].pObjectList[j]->Render(_fTime);
+		}
+	}
+}
+
+void RenderManager::RenderInstancingUI(float _fTime)
+{
+	for (int i = RG_HUD; i < RG_END; ++i)
+	{
+		// 인스턴싱인 애들 렌더
+		if (0 == m_InstancingList[i].size())
+			continue;
+
+		std::list<PInstancingGeometry>::iterator	iter = m_InstancingList[i].begin();
+		std::list<PInstancingGeometry>::iterator	iterEnd = m_InstancingList[i].end();
+
+		for (; iter != iterEnd; ++iter)
+		{
+			Shader*	pShader = nullptr;
+			ID3D11InputLayout*	pLayout = nullptr;
+
+			// 인스턴싱 버퍼를 채워준다.
+			PInstancingGeometry	pGeometry = *iter;
+			for (int j = 0; j < pGeometry->iSize; ++j)
+			{
+				GameObject*	pObj = pGeometry->pGameObjectList[j];
+
+				// 셰이더를 바인지 버튼인지 이미지인지 맞는 셰이더 넣어주기
+				UI* pUICom = pObj->FindComponentFromType<UI>(CT_UI);
+
+				if (nullptr == pUICom)
+				{
+					SAFE_RELEASE(pUICom);
+					continue;
+				}
+
+				Transform*	pTransform = pObj->GetTransform();
+				Scene*	pScene = pObj->GetScene();
+				Camera*	pCamera = pScene->GetUICamera();
+
+				if (false == pGeometry->bAnimation3D && false == pGeometry->bAnimation2D)
+				{
+					Matrix	matWVP, matWV, matWVRot;
+					matWV = pTransform->GetLocalMatrix() * pTransform->GetWorldMatrix();
+					matWV *= pCamera->GetViewMatrix();
+					matWVP = matWV * pCamera->GetProjectionMatrix();
+
+					matWVRot = pTransform->GetLocalRotationMatrix() * pTransform->GetWorldRotationMatrix();
+					matWVRot *= pCamera->GetViewMatrix();
+
+					matWV.Transpose();
+					matWVP.Transpose();
+					matWVRot.Transpose();
+
+					InstancingStaticBuffer	tBuffer;
+					tBuffer.matWV = matWV;
+					tBuffer.matWVP = matWVP;
+					tBuffer.matWVRot = matWVRot;
+
+					AddInstancingData(m_pStaticInstancing,
+						j, &tBuffer);
+
+					switch (pUICom->m_eUIType)
+					{
+					case UI_TYPE::UI_BUTTON:
+						pShader = m_pUIButtonInstancingShader;
+						break;
+					case UI_TYPE::UI_IMAGE:
+						pShader = m_pUIImageInstancingShader;
+						break;
+					case UI_TYPE::UI_BAR:
+						pShader = m_pUIBarInstancingShader;
+						break;
+					default:
+						SAFE_RELEASE(pUICom);
+						SAFE_RELEASE(pCamera);
+						SAFE_RELEASE(pTransform);
+						continue;
+					}
+					pLayout = m_pUIInstancingLayout;
+				}
+
+				SAFE_RELEASE(pUICom);
+				SAFE_RELEASE(pCamera);
+				SAFE_RELEASE(pTransform);
+			}
+
+			PInstancingBuffer	pBuffer = nullptr;
+			pBuffer = m_pStaticInstancing;
+
+			// 추가된 데이터를 버텍스버퍼에 복사한다.
+			CopyInstancingData(pBuffer,
+				pGeometry->iSize);
+
+			// 인스턴싱 물체를 그려낸다.
+			pGeometry->pGameObjectList[0]->PrevRender(_fTime);
+
+			Renderer*	pRenderer = pGeometry->pGameObjectList[0]->FindComponentFromType<Renderer>(CT_RENDERER);
+
+			pRenderer->RenderInstancing(pBuffer, pShader, pLayout,
+				pGeometry->iSize, _fTime);
+
+			SAFE_RELEASE(pRenderer);
+		}
+
+
+	}
+}
+
 void RenderManager::DownScale(RenderTarget* _pHDRRenderTarget)
 {
 	// Output
@@ -2424,7 +2549,7 @@ void RenderManager::TonMapping(RenderTarget* _pHDRRenderTarget)
 	// DOF 추가
 	RenderTarget* pDepthRT = FindRenderTarget("Depth");
 	pDepthRT->SetShader(10);
-	_CONTEXT->CSSetShaderResources(9, 1, &m_pDownScaleSceneSRV);
+	_CONTEXT->PSSetShaderResources(9, 1, &m_pDownScaleSceneSRV);
 
 	_pHDRRenderTarget->SetShader(5);
 	_CONTEXT->PSSetShaderResources(6, 1, &m_pAvgLumSRV);
@@ -2456,7 +2581,7 @@ void RenderManager::TonMapping(RenderTarget* _pHDRRenderTarget)
 	_pHDRRenderTarget->ResetShader(5);
 	_CONTEXT->PSSetShaderResources(6, 1, &pNullSRV);
 	_CONTEXT->PSSetShaderResources(8, 1, &pNullSRV);
-	_CONTEXT->CSSetShaderResources(9, 1, &pNullSRV);
+	_CONTEXT->PSSetShaderResources(9, 1, &pNullSRV);
 
 }
 

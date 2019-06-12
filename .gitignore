@@ -57,6 +57,7 @@ artifacts/
 *.ilk
 *.meta
 *.obj
+*.tlog
 *.pch
 *.pdb
 *.pgc
@@ -292,7 +293,7 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
-# ±âÅ¸ ÆÄÀÏ
+# ï¿½ï¿½Å¸ ï¿½ï¿½ï¿½ï¿½
 *.bmp
 *.png
 *.dds

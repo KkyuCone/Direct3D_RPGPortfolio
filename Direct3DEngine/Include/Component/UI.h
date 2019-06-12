@@ -3,6 +3,15 @@
 
 ENGINE_BEGIN
 
+enum UI_TYPE
+{
+	UI_NONE = 0,
+	UI_BUTTON,
+	UI_IMAGE,
+	UI_BAR,
+	UI_TEXT,
+};
+
 class ENGINE_DLL UI : public Component
 {
 private:
@@ -12,6 +21,9 @@ protected:
 	UI();
 	UI(const UI& _Com);
 	virtual ~UI() = 0;
+
+public:
+	UI_TYPE m_eUIType;
 
 public:
 	virtual void Start();				// 배치될려는 레이어에 포함될때 (배치될때) 호출, 즉 레이어에서 호출해준다.

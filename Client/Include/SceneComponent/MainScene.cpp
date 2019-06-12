@@ -21,7 +21,10 @@ MainScene::MainScene() :
 	pPlayerWeaponObject(nullptr),
 	pPlayerWeaponScript(nullptr),
 	pPlayerCameraPivotScript(nullptr),
-	pQuickSlotBGObj(nullptr)
+	pQuickSlotBGObj(nullptr),
+	pQuickSlotScript(nullptr),
+	pInventoryObj(nullptr),
+	pInventoryScript(nullptr)
 {
 	pHPText = nullptr;
 	pMPText = nullptr;
@@ -72,6 +75,10 @@ MainScene::~MainScene()
 	SAFE_RELEASE(pEXPBarUIObj);
 
 	SAFE_RELEASE(pQuickSlotBGObj);
+	SAFE_RELEASE(pQuickSlotScript);
+
+	SAFE_RELEASE(pInventoryObj);
+	SAFE_RELEASE(pInventoryScript);
 }
 
 bool MainScene::Init()
@@ -109,6 +116,7 @@ bool MainScene::Init()
 	// ÀÎ½ºÅÏ½Ì Å×½ºÆ®
 	InstancingTestInit();
 
+	// UI 
 	UIInit();
 
 	return true;
@@ -418,7 +426,7 @@ bool MainScene::UIInit()
 
 	Transform* pHPBGTr = pHPBarBGObj->GetTransform();
 	pHPBGTr->SetWorldScale(738.0f, 184.8f, 1.0f);
-	pHPBGTr->SetWorldPosition(_RESOLUTION.iWidth / 2.f - 369.0f, _RESOLUTION.iHeight / 2.f - 410.f, 1.0f);
+	pHPBGTr->SetWorldPosition(_RESOLUTION.iWidth / 2.f - 369.0f, _RESOLUTION.iHeight / 2.f - 410.f, 2.0f);
 
 	SAFE_RELEASE(pHPBarBGObj);
 	SAFE_RELEASE(pHPBarBG);
@@ -431,7 +439,7 @@ bool MainScene::UIInit()
 
 	Transform* pHPBGTr02 = pHPBarBGObj02->GetTransform();
 	pHPBGTr02->SetWorldScale(166.8f, 166.8f, 1.0f);
-	pHPBGTr02->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 82.0f, _RESOLUTION.iHeight * 0.5f - 390.0f, 0.7f);
+	pHPBGTr02->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 82.0f, _RESOLUTION.iHeight * 0.5f - 390.0f, 1.3f);
 
 	SAFE_RELEASE(pHPBarBGObj02);
 	SAFE_RELEASE(pHPBarBG02);
@@ -449,7 +457,7 @@ bool MainScene::UIInit()
 
 	Transform* pHPTr = pHPBarUIObj->GetTransform();
 	pHPTr->SetWorldScale(81.0f, 162.0f, 1.0f);
-	pHPTr->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 80.0f, _RESOLUTION.iHeight * 0.5f - 389.f, 0.8f);
+	pHPTr->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 80.0f, _RESOLUTION.iHeight * 0.5f - 389.f, 1.5f);
 
 	SAFE_RELEASE(m_pHPUIBar);
 	SAFE_RELEASE(pHpBarScript);
@@ -468,7 +476,7 @@ bool MainScene::UIInit()
 
 	Transform* pMPTr = pMPBarUIObj->GetTransform();
 	pMPTr->SetWorldScale(81.0f, 162.0f, 1.0f);
-	pMPTr->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 1.0f, _RESOLUTION.iHeight * 0.5f - 389.f, 0.8f);
+	pMPTr->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 1.0f, _RESOLUTION.iHeight * 0.5f - 389.f, 1.5f);
 
 	SAFE_RELEASE(m_pMPUIBar);
 	SAFE_RELEASE(pMPBarScript);
@@ -532,7 +540,7 @@ bool MainScene::UIInit()
 
 	Transform* pEXPBGTr = pEXPBarBGObj->GetTransform();
 	pEXPBGTr->SetWorldScale(1711.2f, 43.2f, 1.0f);
-	pEXPBGTr->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 855.0f, _RESOLUTION.iHeight * 0.5f - 540.f, 1.0f);
+	pEXPBGTr->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 855.0f, _RESOLUTION.iHeight * 0.5f - 540.f, 1.5f);
 
 	SAFE_RELEASE(pEXPBarBGObj);
 	SAFE_RELEASE(pEXPBarBG);
@@ -550,25 +558,32 @@ bool MainScene::UIInit()
 
 	Transform* pEXPTr = pEXPBarUIObj->GetTransform();
 	pEXPTr->SetWorldScale(1678.4f, 21.6f, 1.0f);
-	pEXPTr->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 841.5f, _RESOLUTION.iHeight * 0.5f - 533.f, 0.0f);
+	pEXPTr->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 841.5f, _RESOLUTION.iHeight * 0.5f - 533.f, 1.4f);
 
 	SAFE_RELEASE(m_pEXPUIBar);
 	SAFE_RELEASE(pHpBarScript);
 	SAFE_RELEASE(pEXPTr);
 
+
 	// Äü½½·Ô
-	pQuickSlotBGObj = GameObject::CreateObject("QuickSlot_BG", pUILayer);
+	pQuickSlotBGObj = GameObject::CreateObject("QuickSlot", pUILayer);
+	pQuickSlotScript = pQuickSlotBGObj->AddComponent<QuickSlot>("QuickSlot");
 
-	UIBar* pQuickSlotBG = pQuickSlotBGObj->AddComponent<UIBar>("QuickSlot_BG");
-	pQuickSlotBG->SetTexture("QuickSlot_BG", TEXT("ab2_main_frame.png"), PATH_UI_GAGEBAR);
-	pQuickSlotBG->SetShader(SHADER_UI_BAR);
+	Transform* pQuickSlotTR = pQuickSlotBGObj->GetTransform();
+	pQuickSlotTR->SetWorldScale(1162.2f, 139.8f, 1.0f);
+	pQuickSlotTR->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 590.0f, _RESOLUTION.iHeight * 0.5f - 528.f, 1.4f);
+	SAFE_RELEASE(pQuickSlotTR);
 
-	Transform* pQuickSlot = pQuickSlotBGObj->GetTransform();
-	pQuickSlot->SetWorldScale(1162.2f, 139.8f, 1.0f);
-	pQuickSlot->SetWorldPosition(_RESOLUTION.iWidth * 0.5f - 590.0f, _RESOLUTION.iHeight * 0.5f - 528.f, 1.2f);
 
-	SAFE_RELEASE(pQuickSlotBG);
-	SAFE_RELEASE(pQuickSlot);
+	// ÀÎº¥Åä¸®
+	pInventoryObj = GameObject::CreateObject("Inventory", pUILayer);
+	pInventoryScript = pInventoryObj->AddComponent<Inventory>("Inventory");
+
+	Transform* pInventoryObjTR = pInventoryObj->GetTransform();
+	pInventoryObjTR->SetWorldPosition(_RESOLUTION.iWidth * 0.5f, _RESOLUTION.iHeight * 0.5f, 1.0f);
+	pInventoryObjTR->SetWorldScale(1.0f, 1.0f, 1.0f);
+
+	SAFE_RELEASE(pInventoryObjTR);
 
 	return true;
 }

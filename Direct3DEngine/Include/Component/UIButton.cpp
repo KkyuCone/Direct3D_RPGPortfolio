@@ -12,6 +12,8 @@ ENGINE_USING
 
 UIButton::UIButton()
 {
+	m_eComponentType = CT_UI;
+	m_eUIType = UI_TYPE::UI_BUTTON;
 	m_tButtonCBuffer.vColor = Vector4::Black;
 	m_pRenderer = nullptr;
 
@@ -27,11 +29,13 @@ UIButton::UIButton()
 	m_vColor[BS_DISABLE] = Vector4(0.2f, 0.2f, 0.2f, 1.0f);			//
 	m_vColor[BS_NORMAL] = Vector4(0.8f, 0.8f, 0.8f, 1.0f);			// 기본상태
 	m_vColor[BS_MOUSEON] = Vector4(1.0f, 1.0f, 1.0f, 1.0f);			// 마우스와 충돌
-	m_vColor[BS_CLICK] = Vector4(1.0f, 1.0f, 0.0f, 1.0f);;			// 눌렀을때
+	m_vColor[BS_CLICK] = Vector4(1.0f, 1.0f, 1.0f, 1.0f);;			// 눌렀을때
 }
 
 UIButton::UIButton(const UIButton & _Com) : UI(_Com)
 {
+	m_eComponentType = CT_UI;
+	m_eUIType = UI_TYPE::UI_BUTTON;
 	m_eState = _Com.m_eState;
 	m_ePrevState = _Com.m_ePrevState;
 
@@ -74,13 +78,14 @@ void UIButton::SetStateTexture(BUTTON_STATE _eState, const std::string & _strNam
 {
 	SAFE_RELEASE(m_pTexture[_eState]);
 
-	if (false == GET_SINGLETON(ResourcesManager)->LoadTexture(_strName,
-		_pFileName, _strPathName))
+	bool Test = GET_SINGLETON(ResourcesManager)->LoadTexture(_strName, _pFileName, _strPathName);
+
+	m_pTexture[_eState] = GET_SINGLETON(ResourcesManager)->FindTexture(_strName);
+
+	if (nullptr == m_pTexture)
 	{
 		return;
 	}
-
-	m_pTexture[_eState] = GET_SINGLETON(ResourcesManager)->FindTexture(_strName);
 
 	if (_eState == m_eState && nullptr != m_pMaterial)
 	{
@@ -139,6 +144,8 @@ int UIButton::Update(float _fTime)
 		if (vPos.x <= vMousePos.x && vMousePos.x <= vPos.x + vScale.x &&
 			vPos.y <= vMousePos.y && vMousePos.y <= vPos.y + vScale.y)
 		{
+			m_pGameObject->SetUpdateInstancing(false);
+
 			if (true == GET_SINGLETON(InputManager)->MousePress(MB_LBUTTON))
 			{
 				m_eState = BS_CLICK;
@@ -152,15 +159,20 @@ int UIButton::Update(float _fTime)
 			}
 			else if (true == GET_SINGLETON(InputManager)->MouseRelease(MB_LBUTTON))
 			{
+				if (nullptr == m_CallBackFunc[BS_CLICK])
+				{
+					return 0;
+				}
 				m_CallBackFunc[BS_CLICK](_fTime);
 			}
 			else
 			{
-				m_eState = BS_MOUSEON;                                                                                                                                               
+				m_eState = BS_MOUSEON;                                                                                                                                       
 			}
 		}
 		else
 		{
+			m_pGameObject->SetUpdateInstancing(true);
 			m_eState = BS_NORMAL;
 		}
 	}

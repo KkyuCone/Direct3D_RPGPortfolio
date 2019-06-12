@@ -16,6 +16,8 @@ UIBar::UIBar() :
 	m_pMaterial(nullptr),
 	m_pRenderer(nullptr)
 {
+	m_eComponentType = CT_UI;
+	m_eUIType = UI_TYPE::UI_BAR;
 	m_tBarCBuffer.fRatio = 1.0f;
 	m_tBarCBuffer.vColor = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	m_tBarCBuffer.vEmpty = Vector3(0.0f, 0.0f, 0.0f);
@@ -24,6 +26,8 @@ UIBar::UIBar() :
 
 UIBar::UIBar(const UIBar & _Com) : UI(_Com)
 {
+	m_eComponentType = CT_UI;
+	m_eUIType = UI_TYPE::UI_BAR;
 	m_vColor = _Com.m_vColor;
 
 	if (nullptr != _Com.m_pTexture)
@@ -60,13 +64,14 @@ void UIBar::SetTexture(const std::string &_strName, const TCHAR * _pFileName, co
 {
 	SAFE_RELEASE(m_pTexture);
 
-	if (false == GET_SINGLETON(ResourcesManager)->LoadTexture(_strName,
-		_pFileName, _strPathName))
+	bool Test = GET_SINGLETON(ResourcesManager)->LoadTexture(_strName, _pFileName, _strPathName);
+
+	m_pTexture = GET_SINGLETON(ResourcesManager)->FindTexture(_strName);
+
+	if (nullptr == m_pTexture)
 	{
 		return;
 	}
-
-	m_pTexture = GET_SINGLETON(ResourcesManager)->FindTexture(_strName);
 
 	if (nullptr != m_pMaterial)
 	{
@@ -78,6 +83,11 @@ void UIBar::SetTexture(const std::string &_strName, const TCHAR * _pFileName, co
 void UIBar::SetShader(const std::string & _strKey)
 {
 	m_pRenderer->SetShader(_strKey);
+}
+
+void UIBar::SetRenderState(const std::string & _strKey)
+{
+	m_pRenderer->SetRenderState(_strKey);
 }
 
 void UIBar::Start()

@@ -73,9 +73,10 @@ bool PathManager::Init()
 	CreatePath(PATH_UI_MENU, TEXT("Texture\\UI\\Menu\\"));
 	CreatePath(PATH_UI_INVENTORY, TEXT("Texture\\UI\\Inventory\\"));
 	CreatePath(PATH_UI_SCROLLBAR, TEXT("Texture\\UI\\ScrollBar\\"));
+	CreatePath(PATH_UI_QUICKSLOT, TEXT("Texture\\UI\\QuickSlot\\"));
 
 	// 메쉬 경로
-	CreatePath(PATH_MESH, TEXT("Mesh\\"));
+	CreatePath(PATH_MESH, TEXT("Mesh\\")); 
 	CreatePath(PATH_MESH_HOUSE, TEXT("Mesh\\House\\"));
 	CreatePath(PATH_MESH_HUMAN, TEXT("Mesh\\Human\\"));
 	CreatePath(PATH_MESH_MONSTER, TEXT("Mesh\\Monster\\"));

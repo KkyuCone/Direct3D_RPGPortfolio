@@ -157,6 +157,7 @@
     <ClInclude Include="UserComponent\Inventory.h" />
     <ClInclude Include="UserComponent\PlayerCameraPivot.h" />
     <ClInclude Include="UserComponent\PlayerHead.h" />
+    <ClInclude Include="UserComponent\QuickSlot.h" />
     <ClInclude Include="UserComponent\StateBar.h" />
     <ClInclude Include="UserComponent\Bullet.h" />
     <ClInclude Include="UserComponent\Monster.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="UserComponent\PlayerHead.cpp" />
     <ClCompile Include="UserComponent\PlayerState.cpp" />
     <ClCompile Include="UserComponent\PlayerStateChange.cpp" />
+    <ClCompile Include="UserComponent\QuickSlot.cpp" />
     <ClCompile Include="UserComponent\StateBar.cpp" />
     <ClCompile Include="UserComponent\Bullet.cpp" />
     <ClCompile Include="UserComponent\Monster.cpp" />

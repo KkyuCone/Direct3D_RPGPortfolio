@@ -7,11 +7,15 @@ ENGINE_USING
 UI::UI()
 {
 	m_eComponentType = CT_UI;
+	m_eUIType = UI_TYPE::UI_NONE;
 }
 
 UI::UI(const UI & _Com) : Component(_Com)
 {
-
+	*this = _Com;
+	m_iReferenceCount = 1;
+	m_eComponentType = _Com.m_eComponentType;
+	m_eUIType = _Com.m_eUIType;
 }
 
 

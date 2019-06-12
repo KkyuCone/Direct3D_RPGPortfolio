@@ -75,6 +75,7 @@ public:
 	Matrix GetLocalRotationMatrix() const;
 	Matrix GetLocalPositionMatrix() const;
 	Matrix GetLocalMatrix()	const;
+	Matrix GetLocalRotPos() const;
 
 	///////////////////////////////////////////////////////////////// ¿ùµå
 private:
@@ -140,6 +141,8 @@ public:
 	Matrix GetWorldRotationMatrix() const;
 	Matrix GetWorldPositionMatrix() const;
 	Matrix GetWorldMatrix()	const;
+
+	Matrix GetWorldRotPosMatrix() const;
 
 public:
 	void Move(AXIS _eAxis, float _fSpeed, float _fTime);

@@ -20,7 +20,7 @@ protected:
 	class Material*		m_pMaterial;
 	class Renderer*		m_pRenderer;
 
-	std::function<void(float)> m_CallBackFunc;		// 함수
+	//std::function<void(float)> m_CallBackFunc;		// 함수
 
 public:
 	// 이미지 색상 셋팅
@@ -47,14 +47,14 @@ public:
 private:
 	void DefaultInit();			// 디폴트값
 
-public:
-	void SetCallBackFunc(void(*_pFunc)(float));
-
-	template <typename FuncType>
-	void SetCallBackFunc(FuncType* _pObejct, void(FuncType::*_pFunc)(float))
-	{
-		m_CallBackFunc = std::binary_function(_pFunc, _pObejct, std::placeholders::_1);
-	}
+//public:
+//	void SetCallBackFunc(void(*_pFunc)(float));
+//
+//	template <typename FuncType>
+//	void SetCallBackFunc(FuncType* _pObejct, void(FuncType::*_pFunc)(float))
+//	{
+//		m_CallBackFunc = std::binary_function(_pFunc, _pObejct, std::placeholders::_1);
+//	}
 };
 
 ENGINE_END

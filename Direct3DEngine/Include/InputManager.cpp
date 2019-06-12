@@ -416,9 +416,14 @@ void InputManager::UpdateMouse(float _fTime)
 	vMousePos.x = (float)(ptMouse.x);
 	vMousePos.y = (float)(ptMouse.y);
 
+	// 캡션, 보드 y크기
+	RECT	ptClientSize;
+	GetClientRect(WINDOWHANDLE, &ptClientSize);
+	float fyCapBoSize = (float)(_RESOLUTION.iHeight) - ptClientSize.bottom;
+
 	Vector2 vUIMousePos = {};
 	vUIMousePos.x = (float)(ptMouse.x);
-	vUIMousePos.y = (float)(_RESOLUTION.iHeight) - (float)(ptMouse.y);
+	vUIMousePos.y = (float)(_RESOLUTION.iHeight) - (float)(ptMouse.y) - fyCapBoSize;
 
 	m_vWindowMouseMove = vMousePos - m_vWindowMousePos;
 	m_vWindowMousePos = vMousePos;

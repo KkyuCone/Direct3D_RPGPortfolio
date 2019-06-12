@@ -109,10 +109,14 @@ private:
 	class Shader*		m_pStaticInstancingShader;
 	class Shader*		m_pAnimFrameInstancingShader;
 	class Shader*		m_pAnimInstancingShader;
+	class Shader*		m_pUIButtonInstancingShader;
+	class Shader*		m_pUIImageInstancingShader;
+	class Shader*		m_pUIBarInstancingShader;
 
 	ID3D11InputLayout*		m_pStaticInstancingLayout;
 	ID3D11InputLayout*		m_pAnimFrameInstancingLayout;
 	ID3D11InputLayout*		m_pAnimInstancingLayout;
+	ID3D11InputLayout*		m_pUIInstancingLayout;
 
 private:
 	// ¿ŒΩ∫≈œΩÃ ∞¸∑√
@@ -319,6 +323,10 @@ private:
 	void RenderSSAO(float _fTime);
 
 	void RenderDepthFog(float _fTime);
+
+	// UI ∑ª¥ı
+	void RenderUI(float _fTime);							// ¿ŒΩ∫≈œΩÃ æ∆¥—æ÷µÈ¿Ã∂˚ ¿ŒΩ∫≈œΩÃ UI µ—¥Ÿ ∑ª¥ı
+	void RenderInstancingUI(float _fTime);
 
 	DECLARE_SINGLETON(RenderManager)
 };

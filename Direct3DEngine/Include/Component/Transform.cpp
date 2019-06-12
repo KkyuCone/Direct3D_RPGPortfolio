@@ -3,6 +3,7 @@
 #include "..\Render\ShaderManager.h"
 #include "..\GameObject.h"
 #include "..\Scene\Scene.h"
+#include "..\Scene\Layer.h"
 #include "Animation.h"
 #include "Camera.h"
 
@@ -398,6 +399,20 @@ int Transform::LateUpdate(float _fTime)
 
 	if (nullptr != pParent)
 	{
+		// UI인거랑 아닌거랑 따지자!
+		if (m_pLayer->GetTag() == "UI")
+		{
+			// UI인 경우 스케일은 따지지 말자,Z값도!
+			Transform* pParentTR = pParent->GetTransform();
+			Matrix matLocalParentRotPos = pParentTR->GetLocalRotPos();
+			Matrix matWorldParentRotPos = pParentTR->GetWorldRotPosMatrix();
+			m_MatrixWorldParent = matLocalParentRotPos * matWorldParentRotPos;
+			m_MatrixWorld = m_MatrixWorldScale * m_MatrixWorldRotation * m_MatrixWorldPosition * m_MatrixWorldParent;
+			m_MatrixWorld._43 = m_vWorldPosition.z;
+			SAFE_RELEASE(pParentTR);
+			return 0;
+		}
+
 		// 소켓여부
 		if (true == m_pGameObject->GetSoketEnable())
 		{
@@ -414,6 +429,7 @@ int Transform::LateUpdate(float _fTime)
 
 			SAFE_RELEASE(pParentAni);
 		}
+
 
 		// 부모가 있는 경우 해당 부모의 월드 행렬을 가져온다.
 		Transform* pParentTR = pParent->GetTransform();
@@ -844,4 +860,16 @@ Vector3 Transform::GetWorldPositionAtMatrix() const
 Vector3 Transform::GetPrevWorldPosiitonAtMatrix() const
 {
 	return Vector3(m_PrevMatrixWolrd._41, m_PrevMatrixWolrd._42, m_PrevMatrixWolrd._43);
+}
+
+Matrix Transform::GetLocalRotPos() const
+{
+	Matrix matLocalRotPos = m_MatrixLocalRotation * m_MatrixLocalPosition;
+	return matLocalRotPos;
+}
+
+Matrix Transform::GetWorldRotPosMatrix() const
+{
+	Matrix matWorldRotPos = m_MatrixWorldRotation * m_MatrixWorldPosition;
+	return matWorldRotPos;
 }

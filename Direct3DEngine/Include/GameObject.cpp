@@ -22,7 +22,8 @@ GameObject::GameObject() :
 	m_pParent(nullptr),
 	m_bParent(false),
 	m_bSoket(false),
-	m_SoketBoneNum(-1)
+	m_SoketBoneNum(-1),
+	m_bUpdateInstancing(true)
 {
 	// 모든 게임오브젝트들은 Transform 컴포넌트를 필수적으로 갖고있다.
 	// 이 Transform이 행렬이 변환하는지에 따라 계산하거나 계산하지 않거나로 따진다. -> m_bStatic 변수 여부
@@ -84,6 +85,16 @@ GameObject::~GameObject()
 	// m_StartList
 	Safe_Release_VectorList(m_StartList);
 
+}
+
+void GameObject::SetUpdateInstancing(bool _Enable)
+{
+	m_bUpdateInstancing = _Enable;
+}
+
+bool GameObject::GetUpdateInstancing()
+{
+	return m_bUpdateInstancing;
 }
 
 // static함수
@@ -622,13 +633,13 @@ int GameObject::Input(float _fTime)
 	}
 
 	// 자식 있을 경우 후에 함수 호출
-	std::list<GameObject*>::iterator StartChildIter = m_pChildList.begin();
+	/*std::list<GameObject*>::iterator StartChildIter = m_pChildList.begin();
 	std::list<GameObject*>::iterator EndChildIter = m_pChildList.end();
 
 	for (; StartChildIter != EndChildIter; ++StartChildIter)
 	{
 		(*StartChildIter)->Input(_fTime);
-	}
+	}*/
 
 	return 0;
 }
@@ -667,7 +678,6 @@ int GameObject::Update(float _fTime)
 			++StartIter;
 			continue;
 		}
-
 		// 트랜스폼이 행렬 계산이 필요하면 하기 -> Transfrom이 업데이트가 되는지 안되는지 체크
 		if (m_pTransform == *StartIter &&  true == m_pTransform->GetIsUpdate())
 		{

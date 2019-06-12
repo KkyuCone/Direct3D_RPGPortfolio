@@ -64,6 +64,7 @@
 #define PATH_UI_MENU			"Path_UI_Menu"
 #define PATH_UI_INVENTORY		"Path_UI_Inventory"
 #define PATH_UI_SCROLLBAR		"Path_UI_Scrollbar"
+#define PATH_UI_QUICKSLOT		"Path_UI_PATH_UI_QUICKSLOT"
 
 #define PATH_EXCEL			"Path_Excel"
 
@@ -122,6 +123,10 @@
 #define SHADER_UI_IMAGE					"Shader_UIImage"						// UI 이미지용 (단순이미지)
 #define SHADER_UI_BAR					"Shader_UIBar"							// UI Bar
 
+#define SHADER_UI_BUTTON_INSTANCING		"Shader_UIButton_Instancing"			// UI 버튼용 인스턴싱
+#define SHADER_UI_IMAGE_INSTANCING		"Shader_UIImage_Instancing"				// UI 이미지용 (단순이미지) 인스턴싱
+#define SHADER_UI_BAR_INSTANCING		"Shader_UIBar_Instancing"				// UI Bar 인스턴싱
+
 // InputLayout Key
 #define LAYOUT_POSITION					"Layout_Position"
 #define LAYOUT_POSITION_UV				"Layout_PositionUV"
@@ -129,17 +134,16 @@
 #define LAYOUT_POSITION_NORMAL_COLOR	"Layout_PositionNormalColor"
 #define LAYOUT_VERTEX3D					"Layout_Vertex3D"
 
-#define LAYOUT_VERTEX3D_STATIC_INSTANCING	"Layout_Vertex3D_Static_Instancing"		// 인스턴싱 스태틱용 레이아웃
+#define LAYOUT_VERTEX3D_STATIC_INSTANCING		"Layout_Vertex3D_Static_Instancing"		// 인스턴싱 스태틱용 레이아웃
 #define LAYOUT_VERTEX3D_STATIC_INSTANCING_DEPTH	"Layout_Vertex3D_Static_Instancing_Depth"		// 인스턴싱 스태틱용 레이아웃
-#define LAYOUT_PARTICLE_INSTANCING			"Layout_Particle_Instnacing"			// 인스턴싱 파티클(2D애니메이션)용
-#define LAYOUT_ANIMATION3D_INSTANCING		"Layout_Animation3D_Instnacing"			// 인스턴싱 애니메이션 3D용
+#define LAYOUT_PARTICLE_INSTANCING				"Layout_Particle_Instnacing"			// 인스턴싱 파티클(2D애니메이션)용
+#define LAYOUT_ANIMATION3D_INSTANCING			"Layout_Animation3D_Instnacing"			// 인스턴싱 애니메이션 3D용
+#define LAYOUT_UI_INSTANCING					"LAYOUT_UI_Instancing"				// UI 인스턴싱
 
 #define LAYOUT_POSTEFFECT				"Layout_PostEffect"					// 포스트 이펙트
-
 #define LAYOUT_SHADOW					"Layout_Shadow"						// 그림자
-
-#define LAYOUT_RAIN					"Layout_Rain"
-#define LAYOUT_RAINGEN				"Layout_RainGen"
+#define LAYOUT_RAIN						"Layout_Rain"
+#define LAYOUT_RAINGEN					"Layout_RainGen"
 
 
 #define LAYOUT_TEST_CYLINDER_POSITION	"Layout_TestCylinder"
@@ -254,8 +258,17 @@ ENGINE_DLL std::wstring StringToWstring(std::string s);
 // TCHAR -> String
 ENGINE_DLL std::string TCHARToString(const TCHAR* ptsz);
 
+// String -> TCHAR
+ENGINE_DLL bool StringToTCHAR(std::string _str, TCHAR& _strDest);
+
 // String -> wchar_t*
 ENGINE_DLL std::wstring StringToLPWSTR(const std::string input);
 
 
 ENGINE_DLL bool StringToWstring(const std::string input, std::wstring& _output);
+
+// string -> int
+ENGINE_DLL int	StringToInt(std::string _str);
+
+// int -> string
+ENGINE_DLL std::string	IntToString(int _Number);

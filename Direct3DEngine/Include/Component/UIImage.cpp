@@ -16,13 +16,15 @@ UIImage::UIImage()
 	m_pRenderer = nullptr;
 	m_pMaterial = nullptr;
 	m_pTexture = nullptr;
-	m_CallBackFunc = nullptr;
+	m_eUIType = UI_TYPE::UI_IMAGE;
+	//m_CallBackFunc = nullptr;
 }
 
 UIImage::UIImage(const UIImage & _Com)
 {
-	m_CallBackFunc = nullptr;
+	//m_CallBackFunc = nullptr;
 	m_pTexture = _Com.m_pTexture;
+	m_eUIType = UI_TYPE::UI_IMAGE;
 
 	if (nullptr != m_pTexture)
 	{
@@ -106,10 +108,10 @@ int UIImage::Input(float _fTime)
 
 int UIImage::Update(float _fTime)
 {
-	if (nullptr != m_CallBackFunc)
+	/*if (nullptr != m_CallBackFunc)
 	{
 		m_CallBackFunc(_fTime);
-	}
+	}*/
 
 	return 0;
 }
@@ -154,7 +156,7 @@ void UIImage::DefaultInit()
 	m_pMaterial->AddTextureSet(0, 0, 0, "ImageDefault", TEXT("DefaultImage.png"), PATH_UI_IMAGE);
 }
 
-void UIImage::SetCallBackFunc(void(*_pFunc)(float))
-{
-	m_CallBackFunc = std::bind(_pFunc, std::placeholders::_1);
-}
+//void UIImage::SetCallBackFunc(void(*_pFunc)(float))
+//{
+//	m_CallBackFunc = std::bind(_pFunc, std::placeholders::_1);
+//}
